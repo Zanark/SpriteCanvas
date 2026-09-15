@@ -1,0 +1,21 @@
+{
+  "name": "spritecanvas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A static pixel-art studio with a local, review-first agent bridge.",
+  "scripts": {
+    "start": "node server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "playwright test",
+    "agent": "node scripts/agent.mjs",
+    "reference": "node scripts/create-reference.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}
