@@ -1,0 +1,243 @@
+{
+  "format": "spritecanvas-logo-idle-provenance",
+  "version": 2,
+  "cameraSource": "spritecanvas-logo-provenance.json",
+  "motionReference": {
+    "file": "3286115_dynamotoon_goomba.gif",
+    "sha256": "3ad9730238e7d353e77d1b4ae2ca8a6d0606901da82141db636a463cacc5acc7",
+    "frames": 8,
+    "frameDurationMs": 110
+  },
+  "transformation": "Original scout artwork posed into a reference-inspired in-place waddle: foot plants, forward soles, body bob and restrained helmet lean. Reference character pixels are not copied.",
+  "durationMs": 880,
+  "scale": 16,
+  "gifMatte": "#1E2125",
+  "poses": [
+    {
+      "name": "left-plant",
+      "dx": -1,
+      "dy": 0,
+      "lean": -1,
+      "left": [
+        7,
+        23,
+        "flat"
+      ],
+      "right": [
+        15,
+        21,
+        "sole"
+      ]
+    },
+    {
+      "name": "left-rise",
+      "dx": -1,
+      "dy": -1,
+      "lean": -1,
+      "left": [
+        8,
+        23,
+        "flat"
+      ],
+      "right": [
+        16,
+        20,
+        "sole"
+      ]
+    },
+    {
+      "name": "right-pass",
+      "dx": 0,
+      "dy": -2,
+      "lean": 0,
+      "left": [
+        9,
+        23,
+        "flat"
+      ],
+      "right": [
+        17,
+        19,
+        "sole"
+      ]
+    },
+    {
+      "name": "right-reach",
+      "dx": 1,
+      "dy": -1,
+      "lean": 1,
+      "left": [
+        9,
+        23,
+        "flat"
+      ],
+      "right": [
+        17,
+        20,
+        "sole"
+      ]
+    },
+    {
+      "name": "right-plant",
+      "dx": 1,
+      "dy": 0,
+      "lean": 1,
+      "left": [
+        9,
+        21,
+        "sole"
+      ],
+      "right": [
+        17,
+        23,
+        "flat"
+      ]
+    },
+    {
+      "name": "right-rise",
+      "dx": 1,
+      "dy": -1,
+      "lean": 1,
+      "left": [
+        8,
+        20,
+        "sole"
+      ],
+      "right": [
+        16,
+        23,
+        "flat"
+      ]
+    },
+    {
+      "name": "left-pass",
+      "dx": 0,
+      "dy": -2,
+      "lean": 0,
+      "left": [
+        7,
+        19,
+        "sole"
+      ],
+      "right": [
+        15,
+        23,
+        "flat"
+      ]
+    },
+    {
+      "name": "left-reach",
+      "dx": -1,
+      "dy": -1,
+      "lean": -1,
+      "left": [
+        7,
+        20,
+        "sole"
+      ],
+      "right": [
+        15,
+        23,
+        "flat"
+      ]
+    }
+  ],
+  "bootViews": {
+    "flat": [
+      [
+        null,
+        "#030604FF",
+        "#FFAD13FF",
+        "#FFF052FF",
+        "#FFAD13FF",
+        "#B96B49FF",
+        "#030604FF",
+        null
+      ],
+      [
+        "#030604FF",
+        "#FFAD13FF",
+        "#FFF052FF",
+        "#FFF3E7FF",
+        "#FFF052FF",
+        "#FFAD13FF",
+        "#B96B49FF",
+        "#030604FF"
+      ],
+      [
+        null,
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        null
+      ]
+    ],
+    "sole": [
+      [
+        null,
+        null,
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        null,
+        null
+      ],
+      [
+        null,
+        "#030604FF",
+        "#FFAD13FF",
+        "#FFF052FF",
+        "#FFAD13FF",
+        "#B96B49FF",
+        "#030604FF",
+        null
+      ],
+      [
+        "#030604FF",
+        "#FFAD13FF",
+        "#B96B49FF",
+        "#666052FF",
+        "#666052FF",
+        "#B96B49FF",
+        "#B96B49FF",
+        "#030604FF"
+      ],
+      [
+        null,
+        "#030604FF",
+        "#FFAD13FF",
+        "#B96B49FF",
+        "#B96B49FF",
+        "#B96B49FF",
+        "#030604FF",
+        null
+      ],
+      [
+        null,
+        null,
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        "#030604FF",
+        null,
+        null
+      ]
+    ]
+  },
+  "headTransform": "Translate by dx/dy; row x offset adds sign(lean*(22-y)/10)*round(abs(lean*(22-y)/10)). Eyes retain rigid 2x2 pupils.",
+  "flareTransform": "Translate the original full-scene optical layer with the headlamp; crop only after translation. RGB and alpha are unchanged.",
+  "frameHashes": {
+    "scout-waddle-left-plant": "05c812657583f8c4ab48f06db93e9ba2a55219b8a94d15f4d89812b9c3c893d5",
+    "scout-waddle-left-rise": "463e814d7a9682bb2af3ec33128e9b8bda125295903c9810e20c794ed174634a",
+    "scout-waddle-right-pass": "7233198a8c2c75eeb4aa9feb81eebf063a89006ac012dc9138ab3d681c2bd267",
+    "scout-waddle-right-reach": "ddfbafc6b0a91b1d923717e88b29302d8e422d79ee0e7edb3b111062ba9b93f5",
+    "scout-waddle-right-plant": "c4009a98df588ac088cbd32afe7957df9cbf9221758f2b141a6d73c3dfcf2172",
+    "scout-waddle-right-rise": "1a4035214ae9c8eee5718f9c4627672d4a6e78643bca517a1ee0baadc833f1cc",
+    "scout-waddle-left-pass": "958e294da6d136b63913a00251894a7aae400697f1737e097365284932be1274",
+    "scout-waddle-left-reach": "e6f3d3eb8bafd68badd2fc688ccccf72054160c486742753957a391d75c0506c"
+  }
+}
