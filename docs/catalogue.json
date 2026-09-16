@@ -1,0 +1,147 @@
+{
+  "items": [
+    {
+      "title": "onboarding",
+      "name": "Onboarding: from the first pixel to architectural judgment",
+      "prompt": "Explain the two reading paths using web/app.js:18 and docs/README.md:1. Keep newcomer foundations separate from principal-level design tradeoffs.",
+      "children": [
+        {
+          "title": "principal-guide",
+          "name": "Principal-level guide",
+          "prompt": "Teach the baseline/candidate authority separation using web/app.js:712, server.mjs:1 and web/lib/review.js:1. Include a system diagram, domain ER model and clearly labelled Python pseudocode.",
+          "children": []
+        },
+        {
+          "title": "zero-to-hero",
+          "name": "Zero-to-hero learning path",
+          "prompt": "Explain pixels, cels, layers, frames and browser modules using web/app.js:18, web/app.js:453 and web/index.html:90. Build towards an editable animation and a safe proposal with worked exercises.",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "using-spritecanvas",
+      "name": "Use the studio and collaborate safely",
+      "prompt": "Document actual artist workflows from web/index.html:43 and web/app.js:379. Embed captioned screenshots from the isolated capture workflow in tests/docs/screenshots.spec.js:1.",
+      "children": [
+        {
+          "title": "studio",
+          "name": "Tools, selections, layers, animation and exports",
+          "prompt": "Explain active-cel boundaries, editing guards, copy/paste, timing and keyboard operations from web/app.js:40, web/app.js:379, web/app.js:453 and web/index.html:169.",
+          "children": []
+        },
+        {
+          "title": "collaboration",
+          "name": "Handoff, comparison, feedback and genuine rebasing",
+          "prompt": "Trace the human-facing review cycle using web/app.js:633, web/app.js:712, scripts/agent.mjs:1 and web/lib/review.js:1. Explicitly distinguish saved feedback from automatic agent notification.",
+          "children": []
+        },
+        {
+          "title": "branding",
+          "name": "Scout anatomy and transparent editable branding",
+          "prompt": "Document the separate editable icon, its current pose, equal-boot and eye invariants, local regeneration and subpath accessibility using web/assets/spritecanvas-logo.spritecanvas.json:1, scripts/brand.mjs:4 and tests/brand.test.mjs:1.",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "engine",
+      "name": "Inside the pixel, rendering and review engine",
+      "prompt": "Explain the actual shared data and algorithm layers from web/lib/model.js:1, web/lib/review.js:1, web/lib/storage.js:1 and web/lib/gif.js:1. Use worked examples and failure paths, not generic architecture claims.",
+      "children": [
+        {
+          "title": "project-model",
+          "name": "Projects, validation, layers, frames and cels",
+          "prompt": "Ground the exact schema, RGBA normalization, identity and editable-cell budgets in web/lib/model.js:1 and tests/model.test.mjs:1.",
+          "children": []
+        },
+        {
+          "title": "editing-algorithms",
+          "name": "Discrete pixel editing algorithms",
+          "prompt": "Trace line, shape, fill and transform logic using web/lib/model.js:1 and its UI callers in web/app.js:345. Include small-grid examples, clipping and selection/lock boundaries.",
+          "children": []
+        },
+        {
+          "title": "compositing",
+          "name": "Rendering, alpha and presentation scale",
+          "prompt": "Explain source-over compositing and export distinctions using web/lib/model.js:1, web/lib/export.js:31 and scripts/png.mjs:1. Distinguish native cells from enlarged display pixels.",
+          "children": []
+        },
+        {
+          "title": "review-protocol",
+          "name": "The guarded proposal and feedback protocol",
+          "prompt": "Document exact baseline checks, feedback status, replacement IDs and transitions from web/lib/review.js:1, server.mjs:1 and tests/review.test.mjs:1.",
+          "children": []
+        },
+        {
+          "title": "persistence",
+          "name": "Autosave, atomic persistence and concurrency",
+          "prompt": "Trace browser recovery, pending saves, revision conflicts and disk replacement from web/app.js:95, web/lib/storage.js:1 and server.mjs:1. State actual limits rather than assuming cross-process transactions.",
+          "children": []
+        },
+        {
+          "title": "bridge-cli",
+          "name": "Loopback trust boundaries and agent CLI",
+          "prompt": "Document endpoint contracts, headers, errors, navigation exception and safe CLI operations from server.mjs:1, scripts/agent.mjs:1 and tests/bridge.test.mjs:1.",
+          "children": []
+        },
+        {
+          "title": "gif",
+          "name": "Adaptive animation-wide GIF quantization",
+          "prompt": "Explain the actual histogram, adaptive palette, indexing, scaling, alpha and compression stages using web/lib/gif.js:1, web/lib/export.js:31 and tests/gif.test.mjs:1. Include the 26,624,000-pixel 16x example and its UI guard.",
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "maintenance",
+      "name": "Maintain, validate and publish",
+      "prompt": "Explain contribution and publication boundaries using package.json:1, scripts/build.mjs:1, playwright.config.js:1 and scripts/check-docs.mjs:1. Build readiness is not a deployed-site claim.",
+      "children": [
+        {
+          "title": "tests-deployment",
+          "name": "Tests, screenshots and static deployment",
+          "prompt": "Document isolated tests and reproducible capture using playwright.config.js:1, playwright.docs.config.js:1, tests/docs/screenshots.spec.js:1 and scripts/build.mjs:1.",
+          "children": []
+        },
+        {
+          "title": "principles",
+          "name": "Design principles with real tradeoffs",
+          "prompt": "Explain static-first, review-first and editable-pixel principles using web/app.js:1095, web/app.js:712 and web/lib/model.js:1. Keep each principle focused and distinguish discussion from implementation.",
+          "children": [
+            {
+              "title": "static-first",
+              "name": "A useful application without an API",
+              "prompt": "Trace browser-only initialization and relative static assets using web/app.js:1095, web/lib/storage.js:1 and scripts/build.mjs:1.",
+              "children": []
+            },
+            {
+              "title": "review-first",
+              "name": "A candidate is not authority to overwrite",
+              "prompt": "Explain why acceptance is separate from proposal existence using web/app.js:712, web/lib/review.js:1 and server.mjs:1.",
+              "children": []
+            },
+            {
+              "title": "editable-pixels",
+              "name": "The source is more than its rendered image",
+              "prompt": "Explain layered source, derived exports, palette metadata and measurable anatomy checks using web/lib/export.js:31, web/app.js:666 and tests/brand.test.mjs:1.",
+              "children": []
+            }
+          ]
+        },
+        {
+          "title": "reference",
+          "name": "Glossary and source navigation",
+          "prompt": "Maintain an accurate linked glossary and symbol/test map from web/lib/model.js:1, web/lib/review.js:1, server.mjs:1 and tests/model.test.mjs:1.",
+          "children": []
+        },
+        {
+          "title": "troubleshooting",
+          "name": "Safe diagnosis and recovery",
+          "prompt": "Explain failure diagnosis using web/app.js:31, web/app.js:95 and web/lib/export.js:31. Preserve unsynced artwork before resolving a conflict or testing a fix.",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createProject, clone, color, applyOperations, sameProject, addFrame, addLayer, composite, fromRgba } from '../../web/lib/model.js';
 import { encodePng } from '../../scripts/png.mjs';
+import { brandAssets } from '../../scripts/brand.mjs';
 
 const exec = promisify(execFile);
 const bridgeUrl = 'http://127.0.0.1:4273';
@@ -352,6 +353,110 @@ test('GitHub Pages subpath works without a bridge; offline proposal round trip a
   expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.viewport + 1);
   await page.screenshot({ path: path.join('test-results', 'studio-mobile.png'), fullPage: true });
   expect(errors).toEqual([]);
+});
+
+test('character branding loads under the Pages subpath and matches the transparent editable pixels', async ({ page, request }) => {
+  await page.goto('http://127.0.0.1:4274/SpriteCanvas/');
+  await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
+  const brand = page.getByRole('link', { name: 'SpriteCanvas home' });
+  await expect(brand).toBeVisible();
+  const mark = brand.locator('img');
+  await expect(mark).toHaveAttribute('alt', '');
+  const logo = JSON.parse(await readFile(path.join('web', 'assets', 'spritecanvas-logo.spritecanvas.json'), 'utf8'));
+  const { faviconProject } = brandAssets(logo);
+  for (const name of ['assets/spritecanvas-logo.svg', 'assets/spritecanvas-logo.png', 'favicon.svg']) {
+    const url = `http://127.0.0.1:4274/SpriteCanvas/${name}`;
+    expect((await request.get(url)).ok()).toBeTruthy();
+    const expectedProject = name === 'favicon.svg' ? faviconProject : logo;
+    const imageData = await page.evaluate(async ({ url, width, height }) => {
+      const image = new Image();
+      image.src = url; await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const context = canvas.getContext('2d');
+      context.imageSmoothingEnabled = false;
+      context.drawImage(image, 0, 0, width, height);
+      return { pixels: [...context.getImageData(0, 0, width, height).data], naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight };
+    }, { url, width: expectedProject.width, height: expectedProject.height });
+    const expected = composite(expectedProject), pixels = imageData.pixels;
+    // Canvas round-trips very low alpha through premultiplied 8-bit channels.
+    for (let i = 0; i < pixels.length; i += 4) {
+      expect(pixels[i + 3]).toBe(expected[i + 3]);
+      for (let c = 0; c < 3; c++) expect(Math.abs(pixels[i + c] - expected[i + c]) * expected[i + 3] / 255).toBeLessThanOrEqual(1);
+    }
+    if (name.endsWith('.png')) {
+      expect(imageData.naturalWidth).toBe(logo.width * 32);
+      expect(imageData.naturalHeight).toBe(logo.height * 32);
+    }
+  }
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', './favicon.svg');
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(mark).toBeVisible();
+    expect(await mark.evaluate(image => ({
+      loaded: image.complete && image.naturalWidth > 0,
+      width: image.getBoundingClientRect().width, height: image.getBoundingClientRect().height,
+      rendering: getComputedStyle(image).imageRendering,
+    }))).toEqual({ loaded: true, width: 64, height: 64, rendering: 'pixelated' });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width + 1);
+  }
+});
+
+test('GIF export UI supports 16x above 16 million pixels while retaining GIF and PNG safety limits', async ({ page }) => {
+  test.setTimeout(120000);
+  await page.goto('/'); await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
+  const project = createProject(100, 80, 'Large GIF'), layer = project.layers[0].id;
+  for (let f = 0; f < 13; f++) {
+    if (f) addFrame(project);
+    project.frames[f].duration = 100 + f * 10;
+    project.frames[f].cels[layer][0] = fromRgba(255, f * 10, 0);
+  }
+  expect(project.width * project.height * 16 * 16 * project.frames.length).toBe(26_624_000);
+  const open = async value => {
+    await page.locator('#open-file').setInputFiles({ name: 'export-test.spritecanvas.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(value)) });
+    await saved(page);
+    await expect(page.locator('#frames [data-frame]')).toHaveCount(value.frames.length);
+    await page.locator('.document-actions [data-action="export"]').click();
+    await page.locator('#export-format').selectOption('gif');
+    await page.locator('#export-scale').selectOption('16');
+  };
+  await open(project);
+  const gif = await downloaded(page, () => page.locator('#export-form button[type="submit"]').click());
+  expect(gif.bytes.subarray(0, 6).toString()).toBe('GIF89a');
+  const decoded = await page.evaluate(async base64 => {
+    const decoder = new ImageDecoder({ data: Uint8Array.from(atob(base64), c => c.charCodeAt(0)), type: 'image/gif' });
+    try {
+      await decoder.tracks.ready;
+      const frames = [];
+      for (const frameIndex of [0, 12]) {
+        const { image } = await decoder.decode({ frameIndex });
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = 32; canvas.height = 16;
+          const context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0);
+          frames.push({ width: image.displayWidth, height: image.displayHeight, duration: image.duration,
+            color: [...context.getImageData(15, 15, 1, 1).data], clear: [...context.getImageData(16, 0, 1, 1).data] });
+        } finally { image.close(); }
+      }
+      return { count: decoder.tracks.selectedTrack.frameCount, frames };
+    } finally { decoder.close(); }
+  }, gif.bytes.toString('base64'));
+  expect(decoded).toEqual({ count: 13, frames: [
+    { width: 1600, height: 1280, duration: 100000, color: [255, 0, 0, 255], clear: [0, 0, 0, 0] },
+    { width: 1600, height: 1280, duration: 220000, color: [255, 120, 0, 255], clear: [0, 0, 0, 0] },
+  ] });
+  while (project.frames.length < 16) addFrame(project);
+  await open(project);
+  await page.locator('#export-form button[type="submit"]').click();
+  await expect(page.locator('#notice')).toContainText('maximum 32 million total frame pixels');
+  await page.locator('#export-dialog').getByRole('button', { name: 'Close', exact: true }).click();
+  await open(createProject(256, 256, 'PNG safety limit'));
+  for (const format of ['png', 'sheet']) {
+    await page.locator('#export-format').selectOption(format);
+    await page.locator('#export-form button[type="submit"]').click();
+    await expect(page.locator('#notice')).toContainText('Export dimensions are too large');
+  }
 });
 
 test('image import creates editable pixels, and GIF transparency does not trail across frames', async ({ page }) => {

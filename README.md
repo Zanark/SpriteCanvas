@@ -1,8 +1,67 @@
 # SpriteCanvas
 
-A static, pixel-perfect drawing studio with a **local, review-first agent collaboration workflow**. No account, cloud storage, API key, external fonts, or embedded AI model.
+<img src="web/assets/spritecanvas-logo.png" width="1024" height="1024" alt="The original camera-facing SpriteCanvas scout with its warm headlamp lens flare, at 32x native scale">
 
-![Editable reference reconstruction](web/examples/helmet.png)
+**A pixel-art studio where you draw, animate, and review an agent's changes without giving up your original.**
+
+The scout above is the application's own transparent, editable character logo, not a screenshot pasted over the editor. The studio uses native browser modules and Canvas; the optional local bridge uses Node built-ins. There is no account, cloud storage, public AI key, external font, tracking script, or embedded AI model.
+
+![SpriteCanvas studio with a four-frame helmet animation study](docs/assets/screenshots/studio-overview.png)
+
+**Figure 1 - The actual studio.** Tools live on the left, native-pixel artwork in the middle, layers/palette/navigator on the right, and animation frames below. This image uses the bundled helmet reconstruction plus a generated twinkle study. It is a reproducible documentation fixture, **not the user's private saved workspace**.
+
+**Start here:** [Run locally](#run-locally) to draw, [collaborate safely](#collaborate-with-this-agent) to work with an agent, or open the [illustrated technical handbook](docs/README.md) to learn the implementation.
+
+## Contents
+
+- [What makes SpriteCanvas different](#what-makes-spritecanvas-different)
+- [Run locally](#run-locally)
+- [Your first sprite and animation](#your-first-sprite-and-animation)
+- [What you can draw with](#what-you-can-draw-with)
+- [Export formats and limits](#export-formats-and-limits)
+- [Collaborate with this agent](#collaborate-with-this-agent)
+- [Project format / offline collaboration](#project-format--offline-collaboration)
+- [Reference artwork](#reference-artwork)
+- [GitHub Pages](#github-pages)
+- [Architecture in one picture](#architecture-in-one-picture)
+- [Development](#development)
+- [Documentation and screenshot maintenance](#documentation-and-screenshot-maintenance)
+- [Troubleshooting and known boundaries](#troubleshooting-and-known-boundaries)
+
+## What makes SpriteCanvas different
+
+The important distinction is **editing versus proposing**. A brush stroke changes the active document. An agent proposal does not: it stores an untouched baseline and a separate candidate. You inspect the difference and decide whether to accept it.
+
+```mermaid
+flowchart LR
+    accTitle: The protected artwork loop
+    accDescr: A saved canvas is copied into a protected baseline and an editable candidate. The candidate becomes active only after explicit user acceptance.
+    A["Your saved canvas"] --> B["Untouched baseline"]
+    A --> C["Agent edits a copy"]
+    B --> D["Compare both versions"]
+    C --> D
+    D --> E{"Your decision"}
+    E -->|Accept| F["Candidate becomes active"]
+    E -->|Dismiss or request changes| G["Original stays active"]
+```
+
+You can use either of two modes:
+
+| Mode | Where the studio runs | What persists | How an agent receives artwork |
+| --- | --- | --- | --- |
+| **Local live** | `npm start`, normally port 4173 | Browser recovery state and private local `workspace.json` | Loopback CLI/API; proposals appear in the UI |
+| **Static** | GitHub Pages or any HTTP static host | This browser's IndexedDB | Download a handoff; import the returned proposal JSON |
+
+These are two interfaces to the same project format, not two incompatible editors. Static mode does not require the bridge. A static host cannot directly expose browser IndexedDB to an agent.
+
+Four concepts make the rest of the UI easier to understand:
+
+| Concept | Meaning |
+| --- | --- |
+| **Project** | Dimensions, palette, layer metadata, animation frames, and every editable pixel |
+| **Cel** | One layer's pixels in one frame; drawing affects the active cel |
+| **Working palette** | Convenient editing swatches, not a restriction on RGBA artwork colors |
+| **Proposal** | A candidate plus the complete original baseline, awaiting human review |
 
 ## Run locally
 
@@ -12,13 +71,40 @@ Requires **Node.js 22 or later**. The app and local bridge have no runtime depen
 npm start
 ```
 
-Open **http://127.0.0.1:4173**. Keep the process running while drawing or collaborating. Stop with Ctrl+C. To use a different port:
+Run that command from the repository root, then open **http://127.0.0.1:4173**. A fresh local workspace starts blank. You should see **LOCAL LIVE** in the Co-create panel once the browser detects the bridge.
+
+Keep the process running while drawing or collaborating. Stop with Ctrl+C. To use a different port:
 
 ```powershell
 npm start -- --port 4180
 ```
 
 The browser autosaves to IndexedDB. In local-bridge mode, it also saves the active document to `.spritecanvas\workspace.json`, an ignored, private workspace file. A fresh local workspace starts with a blank canvas. **Open reference artwork** loads the supplied-image reconstruction, or an agent can propose it. Save project downloads a portable editable file; it is not a Git commit.
+
+You do not need `npm ci` just to run the studio. Install development dependencies when running the Playwright tests or screenshot tooling; see [Development](#development).
+
+**Before replacing a project:** click **Save project**. Autosave protects the current workspace, but it is not a named-project library. New, Open, and Open reference artwork replace the active document; download files when you want separate durable versions.
+
+## Your first sprite and animation
+
+This exercise deliberately uses a new layer so the sample stays intact.
+
+1. Save any artwork you want to keep. Click **Open reference artwork** in the footer.
+2. In Layers, click **Add layer**, name it `My highlights`, and keep it selected.
+3. Choose Pencil with **B**, set brush size to **1**, and choose an ivory or yellow swatch.
+4. Draw a few highlight pixels. The navigator updates; the editing swatches do not restrict the pixels you can paint.
+5. Click **Duplicate** in the timeline. This creates another frame with copies of the current frame's cels.
+6. Move or alter the highlight in the second frame. The first frame keeps its own pixels.
+7. Set a frame duration, such as **180 ms**, on each frame. Click **Play** or press **Enter**.
+8. Pause before drawing again. Export a GIF for playback and save the project JSON for further editing.
+
+Do not use **Add blank frame** when you intend a copy: blank and duplicate are intentionally different actions. Likewise, a layer is shared metadata across the animation, while its cel pixels are different in every frame.
+
+![A rectangular selection around the sample character](docs/assets/screenshots/selection-workflow.png)
+
+**Figure 2 - Selection is an editing boundary, not a flattened image.** Select an area with **M**, then use Move, nudging, copy/paste or transforms on the active cel. Other layers do not automatically move along with it.
+
+Continue with the [complete user guide](docs/book/01-using-studio/README.md) for selection, symmetry, layers, frame editing, image imports and keyboard workflows.
 
 ## What you can draw with
 
@@ -37,9 +123,51 @@ Inspired by the drawing, selection, layers, animation, and export workflows docu
 
 Press **?** in the tool rail for shortcuts. Ctrl shortcuts also support Command. Right-click draws with the secondary color; Alt-click picks from visible artwork. Selections constrain the active cel. Layer lock prevents pixel edits, opacity changes, deletion, and merging; layer order/visibility can still change.
 
+### Character logo
+
+The logo uses the **original straight-into-camera pose from frame 8 of the latest character GIF**, not a newly posed character. The app and README retain the warm headlamp lens flare. The favicon uses the same character without the flare. The blue side component is an **earpiece**, and the two frontal boots remain exactly equal and level.
+
+Helmet/face, joined eyes, earpiece, boots, warm headlamp and camera flare remain six separate editable pixel layers in [`spritecanvas-logo.spritecanvas.json`](web/assets/spritecanvas-logo.spritecanvas.json). It is an exact 32 x 32 crop with ten deliberate working swatches: no reposing, resampling or recoloring. The crop keeps the ring, rays and nearby ghost; the full-scene flare beyond the icon boundary is outside this framing. [Extraction provenance](web/assets/spritecanvas-logo-provenance.json) records the GIF/frame and pixel hashes.
+
+Run `npm run brand` to regenerate the flared SVG, **32x README PNG (1024 x 1024)** and separate flare-free favicon, then `npm run build`. The README image declares its full 32x dimensions; a Markdown host may fit it to the reading column. The application uses a 64px, integer-2x view. The favicon tightly crops the character to 20 x 20 native pixels with transparent padding. No background or screenshot is baked into the artwork.
+
+The logo is a **separate project**; changing branding does not replace the scene on your canvas. See [Character anatomy and branding](docs/book/11-character-branding/README.md) for the source, pose, generation path and preservation rules.
+
 The **Working palette** is a chosen set of editing swatches, not a limit on image colors. Its count is shown beside the heading, and large palettes scroll without overlapping. RGBA lighting and transparency can produce additional rendered shades. Palette-only proposals show the original and proposed swatches in Compare versions; accepting one changes the palette without recoloring the artwork, and Undo restores the previous palette.
 
-Limits: 1-256 pixels per dimension, 24 layers, 64 frames, and two million editable cells total. Undo history is capped at 40 operations and approximately four million stored cells. Rotation currently requires a square canvas or selection. Animated playback and GIF exports use frame durations; GIF rounds to 10 ms. GIF export is bounded to 32 million scaled pixels across all frames; reduce the export scale for larger animations.
+## Export formats and limits
+
+![GIF selected in the studio export dialog](docs/assets/screenshots/export-options.png)
+
+**Figure 3 - Choose the deliverable, not just a filename.** Project JSON keeps editing structure; image exports render visible layers. GIF has explicit palette, alpha and timing tradeoffs.
+
+| Export | What it contains | What to keep in mind |
+| --- | --- | --- |
+| SpriteCanvas project | Every layer, frame, swatch and pixel | Best source file for continued editing; not just a preview |
+| PNG | Current composited frame with alpha | Lossless RGBA image, but no editable layer/frame structure |
+| SVG | Current composited frame as pixel rectangles | Crisp at scale; not the original multilayer project |
+| GIF | All frames, looping, one adaptive palette | Up to 255 opaque colors plus transparency; not arbitrary-RGBA lossless |
+| PNG sprite sheet + JSON | Frames laid out in a grid plus coordinates/durations | Keep the PNG and metadata together |
+
+Pixel scale enlarges output blocks; it does not add drawing detail. A 50 x 50 sprite at 8x becomes 400 x 400. **Canvas size** instead changes the editable grid and crops or adds space; it does not upscale the pixels.
+
+| Resource | Bound |
+| --- | --- |
+| Project width / height | 1-256 pixels each |
+| Layers / frames | At most 24 / 64 |
+| Editable cells | At most 2,000,000: `width * height * layers * frames` |
+| Frame duration | 20-10,000 ms |
+| Working palette | At most 256 swatches |
+| Brush size | 1-32 pixels |
+| Undo history | Up to 40 snapshots, additionally pruned by stored-cell weight |
+| PNG / sprite-sheet output | At most 16,000,000 pixels; each output dimension at most 16,384 |
+| GIF output | At most 32,000,000 scaled pixels across all frames; GIF dimensions are separately validated |
+| Imported file / API JSON body | At most 32 MiB |
+| Feedback image / text | At most 2 MiB decoded / 4,000 characters |
+
+For example, `100 * 80 * 13 * 16 * 16 = 26,624,000` scaled frame pixels. That thirteen-frame animation fits the GIF limit at 16x. The **same calculation does not include layer count** because GIF sees composited frames; the editable-cell limit does include layers.
+
+Rotation currently requires a square canvas or square selection. GIF rounds durations to 10ms steps; alpha below 50% is transparent, while remaining partial alpha is matted against white. For precise transparency or further edits, retain PNG/project files. The [GIF chapter](docs/book/09-gif-quantization/README.md) explains why animation-wide quantization avoids the old fixed-palette color crushing.
 
 ## Collaborate with this agent
 
@@ -50,6 +178,20 @@ The web app **does not run an AI model**. This CLI agent can read files and call
 3. The agent submits a separate proposal. Your drawing remains unchanged.
 4. Click **Compare versions**. Review side-by-side, drag a wipe slider, or highlight changed pixels; choose an animation frame if needed.
 5. **Accept agent version** adopts the proposal; **Dismiss proposal** keeps your canvas. After acceptance, Compare retains the last before/after, and Undo can restore the prior version.
+
+![Side-by-side comparison of a sample baseline and agent sparkle proposal](docs/assets/screenshots/compare-versions.png)
+
+**Figure 4 - A proposal is not an accepted edit.** Both sides here are generated documentation examples. The original stays active while the candidate is reviewed; frame, layer and rendered-pixel differences are inspectable.
+
+The three comparison modes answer different questions:
+
+| Mode | Use it to answer |
+| --- | --- |
+| Side by side | Does the proposed composition look better as a whole? |
+| Wipe | Exactly where does one version differ from the other at the same coordinates? |
+| Pixel difference | Which rendered pixels changed? |
+
+Also inspect structural notices. A proposal may change dimensions, layers, frame count, timing, or the working palette without a large visible pixel change.
 
 ### Give feedback from the review
 
@@ -62,6 +204,26 @@ Click **Request changes** beside Accept/Dismiss. Write the changes you want and 
 **This does not automatically start or message an AI.** After saving, tell the agent in chat: **"Read my review feedback."** It reads the exact note and attachment from the bridge. On GitHub Pages, **Save & download request** downloads a review packet to share with the agent instead.
 
 The last 12 feedback entries are retained, with addressed/dismissed status. Notes and images stay in the private local workspace or browser storage; they are not part of the public static site. Feedback text is treated as drawing guidance, not authority for unrelated commands.
+
+![Request changes form containing a sample note and logo reference](docs/assets/screenshots/request-changes.png)
+
+**Figure 5 - Feedback has its own lifecycle.** This is a draft in an isolated sample review. After saving, tell the agent in chat to read it; the button is not a background AI trigger. The request preserves both artwork versions.
+
+### A safe command-line handoff
+
+These commands inspect and propose; they do not accept an edit. The literal revision numbers in examples below are illustrative. In actual use, read the value from the handoff:
+
+```powershell
+npm run agent -- status
+npm run agent -- pull .spritecanvas\handoff.json
+npm run agent -- preview .spritecanvas\preview.png
+$handoff = Get-Content -Raw .spritecanvas\handoff.json | ConvertFrom-Json
+
+# Only after editing a COPY of $handoff.project into candidate.json:
+npm run agent -- propose .spritecanvas\candidate.json --base $handoff.revision --title "Add helmet highlights"
+```
+
+Inspect the PNG as well as the JSON. Pixel arrays alone do not establish whether a visual change is good. Keep the entire handoff as the protected baseline; do not directly modify the workspace file.
 
 ```powershell
 # Inspect the current revision, dimensions, layers, frames, and pending proposal.
@@ -218,6 +380,45 @@ npm run build
 
 Don't open `index.html` directly with `file://`: browser ES-module rules require HTTP. The Pages site has browser autosave and JSON handoff/import; live filesystem collaboration requires the optional local bridge.
 
+The URL above is the expected repository-subpath shape, not evidence that a deployment is currently live. Check the repository's Actions/Pages status when deploying. No Node server or private project is deployed with the static site.
+
+**Inspect local staging before uploading.** The build copies `web` recursively but does not clean an existing `dist`. Files manually placed in either directory can therefore become public or remain in staging. Use a clean deployment directory and keep private files out of both; the copy step is not a secret scrubber.
+
+## Architecture in one picture
+
+```mermaid
+flowchart TB
+    accTitle: Static studio with an optional local bridge
+    accDescr: Browser UI uses shared model and review modules, saves recovery state in IndexedDB and exports files. Only local live mode adds a loopback server and its private atomic workspace; an external agent uses the CLI.
+    UI["Browser studio - app.js"] --> M["Shared pixel/project model"]
+    UI --> R["Shared review rules"]
+    UI --> IDB[("Browser IndexedDB")]
+    UI --> E["PNG / SVG / GIF / project exports"]
+    UI -. "Local mode only" .-> S["Loopback server"]
+    A["External coding agent"] --> CLI["Agent CLI"]
+    CLI --> S
+    S --> M
+    S --> R
+    S --> DISK[("Private workspace.json")]
+```
+
+The central insight is that **pixels, review state and authority are separate concerns**. A project is validated data. A proposal records candidate plus baseline. The UI offers the acceptance decision; the server enforces current revision and review conditions. Static mode uses the same data/review concepts without a networked backend.
+
+Start with the [principal-level guide](docs/book/00-onboarding/principal-guide.md) for tradeoffs and source navigation, or the [zero-to-hero path](docs/book/00-onboarding/zero-to-hero.md) for a slower introduction.
+
+| Source | Responsibility |
+| --- | --- |
+| [`web/app.js`](web/app.js) | UI state, tools, playback, history, autosave coordination, review dialogs |
+| [`web/lib/model.js`](web/lib/model.js) | Shared project validation, pixel operations, transforms and compositing |
+| [`web/lib/review.js`](web/lib/review.js) | Feedback validation, current request and replacement rules |
+| [`web/lib/storage.js`](web/lib/storage.js) | IndexedDB adapter and loopback API helper |
+| [`web/lib/export.js`](web/lib/export.js), [`gif.js`](web/lib/gif.js) | Browser export dispatch and adaptive animated-GIF encoder |
+| [`server.mjs`](server.mjs) | Static HTTP server, loopback request checks, revisioned workspace persistence |
+| [`scripts/agent.mjs`](scripts/agent.mjs) | Inspect, pull, preview, propose, operations and feedback CLI |
+| [`scripts/brand.mjs`](scripts/brand.mjs), [`build-brand.mjs`](scripts/build-brand.mjs) | Editable logo to reproducible local assets |
+
+The [source map](docs/appendices/source-map.md) links directly to symbols and their test evidence.
+
 ## Development
 
 The app uses native HTML, CSS, Canvas, browser modules, and IndexedDB. Node built-ins provide the local server, CLI, PNG preview writer, and core tests. Playwright is a development-only dependency.
@@ -231,3 +432,73 @@ npm run test:browser
 ```
 
 Browser tests exercise real pointer strokes, selections, layer/frame edits, PNG/GIF/sheet downloads, agent CLI pull/propose/compare/accept, stale proposals, concurrent edits, offline JSON collaboration, reload recovery, and repository-subpath hosting.
+
+### Commands and ownership
+
+| Command | Purpose | Important boundary |
+| --- | --- | --- |
+| `npm start` | Run the local studio and bridge | Uses the private working project; keep the server local |
+| `npm test` | Node model/bridge/review/GIF/brand tests | No browser installation needed |
+| `npm run build` | Copy the static application into `dist` | Does not deploy it |
+| `npm run test:browser` | Isolated editor/browser integration tests | Test servers use 4273 and 4274, not live 4173 |
+| `npm run brand` | Regenerate logo SVG/PNG/favicon | Reads the separate public logo project |
+| `npm run reference` | Regenerate the bundled public reconstruction | Not a command to redraw the private workspace |
+| `npm run docs:screenshots` | Build and capture real documentation UI | Isolated sample server on 4373 |
+| `npm run docs:check` | Check local docs links, source ranges, image provenance and catalogue | Does not contact external websites |
+
+### Repository layout
+
+```text
+SpriteCanvas
+  web
+    app.js, index.html, styles.css
+    lib                 shared model, review, storage and export modules
+    assets              editable tool logo and generated local assets
+    examples            public helmet reconstruction
+  scripts               bridge CLI, build, reference/brand generation, docs checks
+  tests
+    browser             interactive regression suite
+    docs                reproducible screenshot capture
+  docs
+    book                numbered learning and engineering chapters
+    appendices          glossary, source map and troubleshooting
+    assets/screenshots  captioned real UI captures and provenance manifest
+  server.mjs            optional loopback bridge plus static server
+  .spritecanvas         ignored private artwork, snapshots and proposals
+  .agent-context        ignored local session offload, when present
+```
+
+When changing a feature, update its related handbook chapter and any affected screenshots. Prefer shared model/review rules over different browser and CLI implementations. Keep explicit errors, stale-revision rejection, separate snapshots, and static-mode support intact.
+
+## Documentation and screenshot maintenance
+
+The [book home](docs/README.md) is the documentation entry point, with beginner, artist and engineering reading paths. Chapters cover actual implementation rather than an imagined future architecture.
+
+Screenshots are **generated by browser interaction**, not mockups or screenshot-shaped overlays. The capture script loads the bundled public example, adds a small deterministic animation/proposal fixture, and opens the real review/export screens.
+
+```powershell
+# Requires the development dependencies and Playwright Chromium.
+npm run docs:screenshots
+npm run docs:check
+```
+
+The capture process starts a dedicated bridge on **4373**, with state under `test-results\docs-workspace`. It does not read or replace `.spritecanvas\workspace.json`, use port 4173, or make external requests. Its [manifest](docs/assets/screenshots/manifest.json) records captions, image sizes/checksums, source hashes and isolation.
+
+The checker validates local Markdown/HTML asset links, source-line ranges, screenshot coverage/checksums/source freshness, the documentation catalogue and Mermaid accessibility metadata. It is **not a complete Mermaid renderer or an external-link availability check**. Review diagrams in a Mermaid-capable Markdown viewer and inspect the captured images when making visual changes.
+
+Context offload is separate from product documentation. A local `.agent-context` keeps verified project state and persona continuity; it is ignored by Git and not shipped. A fresh clone gets the public handbook, not another person's private saved drawing or local session history.
+
+## Troubleshooting and known boundaries
+
+| Symptom | First action |
+| --- | --- |
+| Blank or blocked page after opening a file directly | Use an HTTP server, not `file://` for the application |
+| STATIC badge when you expected local collaboration | Verify `npm start`, the address/port, and `/api/health` |
+| Drawing does nothing | Pause playback; check active layer visibility/lock and selection bounds |
+| A proposal cannot be accepted | Check for a changed canvas or open Request changes feedback; rebase rather than forcing a revision |
+| GIF colors or glow differ from PNG | Review quantization and white-matte alpha rules; retain PNG/project for exact RGBA |
+| Export is too large | Reduce scale or sprite-sheet dimensions; account for every GIF frame |
+| Browser and disk disagree | Download the browser version first; do not clear storage or overwrite the workspace to hide the conflict |
+| Logo or screenshots are stale | Regenerate brand assets, recapture screenshots and run docs checks |
+
+Detailed recovery procedures live in [Troubleshooting](docs/appendices/troubleshooting.md). SpriteCanvas intentionally does **not** provide `.aseprite` import, tilemaps, indexed-color mode, arbitrary blend modes, a named-project cloud library, multi-user network editing, automatic agent execution, or a public AI endpoint. Mobile layout coverage is not a claim of exhaustive device/browser certification.

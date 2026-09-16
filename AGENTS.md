@@ -3,6 +3,14 @@
 SpriteCanvas is a static pixel-art editor with an optional loopback collaboration bridge.
 The browser/bridge/CLI share `web/lib/model.js`. Keep the site usable without any API.
 
+## Session continuity and documentation
+
+- This repository is a designated Context Mesh base. Read its local `.agent-context\STATE.md`, `MEMORY.md`, and recent `JOURNAL.md` when present. Recheck recorded runtime state before acting.
+- Update only this base's context store; sibling stores are read-only. The local offload is ignored by Git and excluded from the static build.
+- Keep the illustrated handbook in `docs` and the detailed root README current with user-visible changes. Use numbered chapters, diagram-first explanations, worked examples, accurate source links, and captions for embedded images.
+- Documentation screenshots must come from the isolated public-sample capture workflow, never by replacing or publishing the user's live workspace.
+- The tool logo is a separate editable project in `web\assets`; regenerate derived assets with `npm run brand` after editing it.
+
 ## Working with the user's artwork
 
 - Read the current saved state before drawing: `npm run agent -- status`, then `pull .spritecanvas\handoff.json`.

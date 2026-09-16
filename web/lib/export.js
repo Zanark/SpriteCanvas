@@ -37,7 +37,6 @@ export async function exportProject(project, { format = 'png', frame = 0, scale 
   }
   const frames = project.frames.length;
   if (format === 'gif') {
-    if (project.width * project.height * scale * scale * frames > 16_000_000) throw new Error('GIF export is too large. Reduce scale (maximum 16 million total frame pixels).');
     download(new Blob([encodeGif(project, scale)], { type: 'image/gif' }), `${name}.gif`);
     return;
   }
