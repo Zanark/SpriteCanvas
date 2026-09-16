@@ -1,6 +1,8 @@
 # SpriteCanvas
 
-<img src="web/assets/spritecanvas-logo-idle.gif" width="512" height="512" alt="The SpriteCanvas scout performs a bouncy eight-pose waddle with alternating foot plants and a moving warm headlamp flare, at 16x native scale">
+<p align="center">
+  <img src="web/assets/spritecanvas-logo-idle.gif" width="512" height="512" alt="The SpriteCanvas scout performs a bouncy eight-pose waddle with alternating foot plants and a moving warm headlamp flare, at 16x native scale">
+</p>
 
 **A pixel-art studio where you draw, animate, and review an agent's changes without giving up your original.**
 
