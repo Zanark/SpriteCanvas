@@ -17,7 +17,7 @@ Node tests, isolated browser fixtures, documentation screenshots, and
 documentation checks serve different purposes.
 The live bridge's default port **4173 is not a test target**.
 ([package.json:4](../../../package.json#L4-L23),
-[scripts/build.mjs:1](../../../scripts/build.mjs#L1-L7),
+[scripts/build.mjs:1](../../../scripts/build.mjs#L1-L14),
 [playwright.config.js:15](../../../playwright.config.js#L15-L18))
 
 ```mermaid
@@ -47,9 +47,9 @@ flowchart TD
 
 This diagram is a recommended contributor evidence flow, not a claim that
 every branch runs every step in CI. The Pages workflow explicitly runs
-`npm test` and build; it does not run the browser suite or documentation
-commands in the inspected workflow.
-([.github/workflows/pages.yml:19](../../../.github/workflows/pages.yml#L19-L34))
+`npm test`, build and a post-deployment browser smoke check against the public
+site. It does not run the entire isolated browser suite or documentation capture.
+([.github/workflows/pages.yml:20](../../../.github/workflows/pages.yml#L20-L58))
 
 ## 1. Scripts and dependency boundary
 
@@ -59,6 +59,7 @@ commands in the inspected workflow.
 | `npm run build` | `node scripts/build.mjs` | Produce static `dist` content |
 | `npm test` | `node --test tests/*.test.mjs` | Top-level Node test modules |
 | `npm run test:browser` | `playwright test` | Browser workflows with configured fixtures |
+| `npm run test:pages` | Playwright with `playwright.pages.config.js` | Real published editor, persistence, export and deployment fingerprint |
 | `npm run agent -- ...` | `node scripts/agent.mjs` | Local handoffs, previews, feedback, and proposals |
 | `npm run brand` | `node scripts/build-brand.mjs` | Public branding generation entry point |
 | `npm run reference` | `node scripts/create-reference.mjs` | Public reference generation entry point |
@@ -82,7 +83,7 @@ For a fresh contributor checkout, dependency provisioning is normally
 Browser binaries must also be available for Playwright before browser work.
 Provision tools only in an authorized development environment—do not treat
 documentation examples as permission to modify an active artwork machine.
-([.github/workflows/pages.yml:20](../../../.github/workflows/pages.yml#L20-L27),
+([.github/workflows/pages.yml:31](../../../.github/workflows/pages.yml#L31-L39),
 [playwright.config.js:1](../../../playwright.config.js#L1-L18))
 
 ## 2. Node tests are not all pure tests
@@ -187,14 +188,20 @@ flowchart LR
 The build creates `dist` if needed and recursively copies `web`.
 That is a **directory-level input allowlist**, not a filename sanitizer.
 Anything placed in `web` is eligible for publication.
-([scripts/build.mjs:5](../../../scripts/build.mjs#L5-L7))
+([scripts/build.mjs:9](../../../scripts/build.mjs#L9-L10))
+
+The build additionally writes `build-info.json` containing a format/version and
+the CI `GITHUB_SHA`. Local builds without that environment variable record
+`null`; they do not invent a deployed revision. The post-deployment check uses
+this public commit fingerprint to reject a cached older artifact.
+([scripts/build.mjs:5](../../../scripts/build.mjs#L5-L13))
 
 The script does **not** clean existing `dist` first.
 It also does not transpile, minify, rewrite URLs, or build the handbook into
 a separate site. Existing stray files in a manually modified `dist` can remain.
 Keep private data out of both `web` and deployment staging; do not claim the
 copy step scrubs an already contaminated directory.
-([scripts/build.mjs:1](../../../scripts/build.mjs#L1-L7),
+([scripts/build.mjs:1](../../../scripts/build.mjs#L1-L14),
 [AGENTS.md:37](../../../AGENTS.md#L37-L40))
 
 ## 5. Pages subpaths and the optional API
@@ -228,16 +235,32 @@ It uses read permission for contents, write for Pages and OIDC tokens, and
 a `github-pages` concurrency group with cancellation of in-progress runs.
 ([.github/workflows/pages.yml:1](../../../.github/workflows/pages.yml#L1-L12))
 
-Its deployment job checks out code, sets up Node 22 with npm caching,
-runs `npm ci`, `npm test`, and build, configures Pages, uploads **`dist`**,
-then calls the Pages deploy action.
-The environment URL comes from the deployment step output.
-([.github/workflows/pages.yml:14](../../../.github/workflows/pages.yml#L14-L34))
+Its deployment job first requires Pages `build_type: workflow`. This prevents
+a root-branch README/Jekyll publisher from competing with the studio deployment.
+The repository README stays in place; it is not the website's entry point.
 
-This is a workflow definition, not proof a deployment completed.
-No deployment run, published URL health, or release result was measured for
-this chapter.
-Keep those operational claims separate from implementation documentation.
+The job sets up Node22, runs `npm ci`, `npm test`, and build, installs Chromium,
+configures Pages, uploads **`dist`**, then deploys it. A final browser check uses
+the actual deployment URL and expected commit SHA. Failure traces/screenshots
+are retained as Actions artifacts.
+([.github/workflows/pages.yml:14](../../../.github/workflows/pages.yml#L14-L58))
+
+The [live check](../../../tests/pages/site.spec.js) waits for the build fingerprint,
+opens the canonical URL, verifies a working editor in STATIC mode, draws into an
+isolated16x16 fixture, reloads browser persistence and exports a PNG. It also
+checks responsive layout, asset/runtime errors, absence of network writes and
+exclusion of README/private context paths from the artifact.
+
+`npm run test:pages` defaults to `https://zanark.github.io/SpriteCanvas/`.
+`SPRITECANVAS_SITE_URL` can override the HTTP(S) root, including its trailing
+slash. `SPRITECANVAS_EXPECTED_SHA` can require a full commit. The workflow sets
+both from deployment outputs. The [configuration](../../../playwright.pages.config.js)
+starts no local server and uses a fresh browser context, so it does not modify
+the user's existing artwork or browser profile.
+
+A workflow definition is still not a successful deployment. Inspect the run's
+deploy **and verification** results; a stale fingerprint, README page, broken
+module or failed draw/export causes the live check to fail.
 
 ## 7. Reproducible documentation commands
 

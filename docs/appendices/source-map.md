@@ -207,10 +207,11 @@ with a universal third-party GIF decoder implementation.
 | File | Source link | Boundary to remember |
 |---|---|---|
 | `package.json` | [Scripts and requirements](../../package.json#L7-L23) | Node 22+, configured commands, development dependency |
-| `scripts/build.mjs` | [Copy operation](../../scripts/build.mjs#L1-L7) | Copies `web`; does not clean `dist` |
+| `scripts/build.mjs` | [Copy and fingerprint](../../scripts/build.mjs#L1-L14) | Copies `web`, writes commit metadata; does not clean `dist` |
 | `scripts/static-test-server.mjs` | [Pages fixture](../../scripts/static-test-server.mjs#L6-L23) | `/SpriteCanvas/` subpath, no bridge API |
 | `playwright.config.js` | [Fixture configuration](../../playwright.config.js#L3-L18) | Test bridge 4273 and static fixture 4274, no server reuse |
-| `.github/workflows/pages.yml` | [Workflow](../../.github/workflows/pages.yml#L1-L34) | Test/build/upload `dist`; workflow definition is not deployment proof |
+| `.github/workflows/pages.yml` | [Workflow](../../.github/workflows/pages.yml#L1-L58) | Actions-only publishing, test/build/upload `dist`, verify actual deployed editor |
+| `tests/pages/site.spec.js` | [Live-site check](../../tests/pages/site.spec.js) | Isolated browser, expected commit, drawing/persistence/export and artifact boundary |
 | `AGENTS.md` | [Contributor contract](../../AGENTS.md#L1-L40) | Protect artwork, preserve review authority, avoid public secrets/assets dependencies |
 
 For screenshot reproduction and documentation checks, use the configured

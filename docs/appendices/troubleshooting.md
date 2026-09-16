@@ -30,6 +30,14 @@ Check the browser's network/console errors. A404 for a relative module path sugg
 
 The GitHub Pages build expects the contents of `dist`, not the repository directory and not the optional Node bridge. See [deployment](../book/10-testing-deployment/README.md).
 
+## The website shows the README instead of the editor
+
+Set repository **Settings > Pages > Build and deployment > Source** to **GitHub Actions**, not "Deploy from a branch". Root-branch publishing can render the README through Jekyll while the custom workflow separately publishes the studio, leaving competing deployments.
+
+Keep `README.md` at the repository root. The Pages workflow uploads only `dist`, whose entry point comes from `web/index.html`. Rerun **Deploy static studio to GitHub Pages**, then run `npm run test:pages` to check the public editor rather than treating a successful upload as proof that it works.
+
+The workflow checks the publishing mode and verifies the deployed commit through `build-info.json`. If a browser still shows an old page after deployment, reload it; a metadata mismatch or failed editor check should be investigated in Actions, not worked around by deleting the README.
+
 ## STATIC appears when you expected LOCAL LIVE
 
 1. Verify that the server process is running.

@@ -13,7 +13,8 @@
     "brand": "node scripts/build-brand.mjs",
     "docs:screenshots": "npm run build && playwright test --config playwright.docs.config.js",
     "docs:check": "node scripts/check-docs.mjs",
-    "reference": "node scripts/create-reference.mjs"
+    "reference": "node scripts/create-reference.mjs",
+    "test:pages": "playwright test --config playwright.pages.config.js"
   },
   "engines": {
     "node": ">=22"

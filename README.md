@@ -371,11 +371,24 @@ For a fresh, untouched local workspace, `node scripts\demo-reference.mjs` create
 
 ## GitHub Pages
 
+**[Open the live pixel editor](https://zanark.github.io/SpriteCanvas/)**. This README stays on the repository's GitHub page; the website publishes `web/index.html`, not this document.
+
 The site uses relative asset URLs, including ES modules and examples, so it works at `https://zanark.github.io/SpriteCanvas/` without a custom build-time base path.
 
 1. In GitHub, select **Settings > Pages > Source > GitHub Actions**.
 2. Merge/push this implementation to `main`, or manually run **Deploy static studio to GitHub Pages** once the workflow is available.
-3. The workflow runs the core/bridge tests, builds `dist`, and deploys **only the static web files**.
+3. The workflow checks that Pages uses Actions, runs the core/bridge tests, builds `dist`, and deploys **only the static web files**.
+4. After deployment, it opens the public URL in Chromium and checks the editor, drawing, browser persistence, PNG export, mobile layout and the published commit.
+
+**Do not select "Deploy from a branch" with the repository root.** That enables a separate README/Jekyll publisher which can compete with the studio deployment. The canonical Pages setting is **GitHub Actions** (`build_type: workflow`).
+
+To rerun the live-site check independently:
+
+```powershell
+npm run test:pages
+```
+
+It uses a fresh browser context and generated test artwork, never your existing canvas. `SPRITECANVAS_SITE_URL` can select another HTTP(S) site root ending in `/`; `SPRITECANVAS_EXPECTED_SHA` optionally requires a specific full commit. CI supplies both automatically and waits for the new deployment metadata to propagate.
 
 For another static host:
 
@@ -386,7 +399,7 @@ npm run build
 
 Don't open `index.html` directly with `file://`: browser ES-module rules require HTTP. The Pages site has browser autosave and JSON handoff/import; live filesystem collaboration requires the optional local bridge.
 
-The URL above is the expected repository-subpath shape, not evidence that a deployment is currently live. Check the repository's Actions/Pages status when deploying. No Node server or private project is deployed with the static site.
+The generated `build-info.json` records `GITHUB_SHA` in CI (or `null` for a local build), allowing the live check to distinguish the new artifact from a cached older deployment. No Node server, repository README or private project is deployed with the static site.
 
 **Inspect local staging before uploading.** The build copies `web` recursively but does not clean an existing `dist`. Files manually placed in either directory can therefore become public or remain in staging. Use a clean deployment directory and keep private files out of both; the copy step is not a secret scrubber.
 

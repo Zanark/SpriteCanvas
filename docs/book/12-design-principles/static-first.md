@@ -61,8 +61,8 @@ The build copies `web` into `dist`, and Pages uploads `dist`.
 There is no deployed `server.mjs` process in that artifact path.
 The static fixture makes this constraint concrete by serving the repository
 subpath without implementing `/api`.
-([scripts/build.mjs:5](../../../scripts/build.mjs#L5-L7),
-[.github/workflows/pages.yml:28](../../../.github/workflows/pages.yml#L28-L34),
+([scripts/build.mjs:9](../../../scripts/build.mjs#L9-L14),
+[.github/workflows/pages.yml:40](../../../.github/workflows/pages.yml#L40-L46),
 [scripts/static-test-server.mjs:6](../../../scripts/static-test-server.mjs#L6-L23))
 
 Browser-only work is saved through IndexedDB and can be downloaded as project
@@ -121,7 +121,7 @@ A hosted server can coordinate accounts, centralized persistence, and background
 jobs. This implementation instead chooses explicit local files and a single
 optional disk workspace. The benefit is a deployable static editor; the cost
 is that collaborators must exchange snapshots or run a local bridge.
-([scripts/build.mjs:5](../../../scripts/build.mjs#L5-L7),
+([scripts/build.mjs:9](../../../scripts/build.mjs#L9-L14),
 [scripts/agent.mjs:36](../../../scripts/agent.mjs#L36-L42),
 [web/app.js:734](../../../web/app.js#L734-L743))
 
