@@ -34,6 +34,17 @@ test('published site is the editor, with working offline drawing, persistence an
   await expect(page.locator('#overlay-canvas')).toBeVisible();
   await expect(page.getByRole('link', { name: 'SpriteCanvas home' })).toBeVisible();
   expect(await page.locator('.brand-mark').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+  const download = async action => {
+    const pending = page.waitForEvent('download');
+    await action();
+    return readFile(await (await pending).path());
+  };
+  const save = () => download(() => page.locator('.document-actions [data-action="save"]').click());
+  const blank = JSON.parse((await save()).toString());
+  expect(blank.name).toBe('Untitled sprite');
+  expect([blank.width, blank.height, blank.layers.length, blank.frames.length]).toEqual([32, 32, 1, 1]);
+  expect(blank.frames[0].cels[blank.layers[0].id].every(pixel => pixel === null)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath('published-empty-startup.png'), fullPage: true });
 
   // A fresh browser context owns this fixture; no real user's IndexedDB or bridge is touched.
   const fixture = createProject(16, 16, 'Pages smoke fixture');
@@ -47,12 +58,6 @@ test('published site is the editor, with working offline drawing, persistence an
   const bounds = await page.locator('#overlay-canvas').boundingBox();
   await page.mouse.click(bounds.x + 2.5 * bounds.width / 16, bounds.y + 2.5 * bounds.height / 16);
   await expect(page.locator('#save-status')).toHaveText('Autosaved in this browser');
-  const download = async action => {
-    const pending = page.waitForEvent('download');
-    await action();
-    return readFile(await (await pending).path());
-  };
-  const save = () => download(() => page.locator('.document-actions [data-action="save"]').click());
   const drawn = JSON.parse((await save()).toString());
   expect(drawn.frames[0].cels[drawn.layers[0].id][2 * 16 + 2]).toBe('#FFAD13FF');
   await page.reload();

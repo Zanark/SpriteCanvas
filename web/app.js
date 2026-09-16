@@ -1118,7 +1118,7 @@ async function initialize() {
     bridge = !!saved.bridge;
     dirty = !!saved.pending;
     if (dirty) scheduleSave();
-  } else project = await reference();
+  } else project = createProject();
   frameIndex = 0; layerId = project.layers.at(-1).id;
   setTool('pencil'); updateColor(); renderAll(); fitCanvas();
   if (db) await cache(dirty);

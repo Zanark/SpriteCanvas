@@ -215,7 +215,7 @@ browser recovery copy.
 | Pending bridge cache, different disk revision | Restore browser project but signal conflict |
 | No live bridge, existing bridge-backed cache | Retain bridge identity and pending state |
 | Browser-only saved state | Restore its project, revision, and review state |
-| No saved state and no bridge | Load the public reference through the app's initialization path |
+| No saved state and no bridge | Create a blank32x32 project with one transparent cel; reference loading is explicit |
 
 Keeping `saved.bridge` matters: losing a bridge must not silently convert
 unsynced recovery work into a fresh unrelated static document.

@@ -212,4 +212,38 @@ test('GIF explicitly rejects invalid projects, scales, dimensions, and oversized
   assert.throws(() => encodeGif(invalid), /pixel count/);
   assert.throws(() => encodeGif(project, 32768), /GIF width/);
   assert.throws(() => encodeGif(project, 2829), /32 million/);
+  assert.throws(() => encodeGif(project, 1, { alphaMode: 'unknown' }), /GIF alpha mode/);
+});
+
+test('optional alpha dithering preserves coverage and RGB without a background matte', () => {
+  const project = createProject(8, 1), alpha = [0, 1, 32, 64, 127, 128, 192, 255];
+  project.frames[0].cels[project.layers[0].id] = alpha.map(a => fromRgba(255, 246, 168, a));
+  const before = clone(project), gif = inspectGif(encodeGif(project, 16, { alphaMode: 'dither' }));
+  const pixels = decodedPixels(gif);
+  assert.deepEqual(project, before);
+  for (let cell = 0; cell < alpha.length; cell++) {
+    let visible = 0;
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const pixel = pixels[y * gif.width + cell * 16 + x];
+      if (pixel[3]) { visible++; assert.deepEqual(pixel, [255, 246, 168, 255]); }
+    }
+    assert.equal(visible, Math.round(alpha[cell] * 256 / 255), 'Each 16x block approximates its original alpha within half a sample.');
+  }
+  assert.equal(gif.frames[0].disposal, 2);
+});
+
+test('alpha dithering is deterministic and clears moving transparent frames without erasing opaque black', () => {
+  const project = createProject(2, 1), layer = project.layers[0].id;
+  project.frames[0].cels[layer] = ['#000000FF', '#FFF6A840'];
+  addFrame(project, 0);
+  project.frames[1].cels[layer] = ['#FFF6A840', null];
+  const bytes = encodeGif(project, 16, { alphaMode: 'dither' });
+  assert.deepEqual(encodeGif(clone(project), 16, { alphaMode: 'dither' }), bytes);
+  const gif = inspectGif(bytes), first = decodedPixels(gif), second = decodedPixels(gif, 1);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    assert.deepEqual(first[y * 32 + x], [0, 0, 0, 255]);
+    assert.equal(first[y * 32 + x + 16][3], second[y * 32 + x][3], 'The dither pattern does not flicker across frames or whole-native-pixel moves.');
+    assert.equal(second[y * 32 + x + 16][3], 0);
+  }
+  assert.ok(gif.frames.every(frame => frame.disposal === 2 && frame.transparent === 1));
 });

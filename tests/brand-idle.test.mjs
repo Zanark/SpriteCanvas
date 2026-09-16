@@ -78,8 +78,10 @@ test('README uses a reproducible 16x looping GIF while editable artwork stays tr
   assert.deepEqual([...gif.subarray(loop + 11, loop + 16)], [3, 1, 0, 0, 0]);
   const transparentAlpha = composite(idle).findIndex((value, index) => index % 4 === 3 && value === 0);
   assert.ok(transparentAlpha >= 0);
-  assert.deepEqual([...composite(gifProject).slice(transparentAlpha - 3, transparentAlpha + 1)], [30, 33, 37, 255]);
-  assert.ok(composite(gifProject)[(13 * 32) * 4] > 60, 'The outer warm streak survives GIF matting.');
+  assert.deepEqual(gifProject, idle, 'No background or matte layer is added for export.');
+  assert.equal(composite(gifProject)[transparentAlpha], 0);
+  const provenance = await read('spritecanvas-logo-idle-provenance.json');
+  assert.deepEqual(provenance.gifTransparency, { mode: 'ordered-alpha-dither', matrixSize: 16, matte: null });
   const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
   assert.match(readme, /<img src="web\/assets\/spritecanvas-logo-idle\.gif" width="512" height="512"/);
   assert.throws(() => idleBrandAssets(source), /square, animated/);

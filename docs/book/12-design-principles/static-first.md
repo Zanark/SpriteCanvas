@@ -73,11 +73,12 @@ artifact, not merely a convenience attachment.
 [web/lib/export.js:34](../../../web/lib/export.js#L34-L36))
 
 Static-first also does not mean a guaranteed offline-installable application.
-The inspected initialization still loads application assets and, on a fresh
-browser-only start, the reference project. The documented contract is
+Initialization still loads application assets, but a fresh browser-only start
+creates a blank32x32 project without fetching the sample. Existing saved work
+is restored; the reference loads only through its explicit action. The contract is
 **no collaboration API dependency**, not an invented service-worker cache
 or offline availability guarantee.
-([web/app.js:1091](../../../web/app.js#L1091-L1120))
+([web/app.js:1091](../../../web/app.js#L1091-L1121))
 
 ## 3. Two transports, one review idea
 

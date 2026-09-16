@@ -3,9 +3,11 @@ import { composite, integer, validateProject } from './model.js';
 const COLOR_WEIGHTS = [0.299, 0.587, 0.114];
 
 // One palette for the entire animation, independent of the editor's swatches.
-// Index 0 is transparent; alpha >= 0.5 is matted against white before quantizing.
-export function encodeGif(project, scale = 1) {
+// Default alpha uses a white matte; optional dithering preserves a transparent backdrop.
+export function encodeGif(project, scale = 1, { alphaMode = 'threshold' } = {}) {
   integer(scale, 1, 65535, 'GIF scale');
+  if (!['threshold', 'dither'].includes(alphaMode)) throw new Error('Unknown GIF alpha mode.');
+  const dither = alphaMode === 'dither';
   project = validateProject(project);
   const width = project.width * scale, height = project.height * scale;
   integer(width, 1, 65535, 'GIF width');
@@ -17,17 +19,19 @@ export function encodeGif(project, scale = 1) {
   const frames = project.frames.map((_, index) => {
     const rgba = composite(project, index);
     const pixels = new Int32Array(project.width * project.height).fill(-1);
+    const alphaBytes = dither ? new Uint8Array(pixels.length) : null;
     for (let i = 0; i < pixels.length; i++) {
-      const offset = i * 4, alpha = rgba[offset + 3] / 255;
-      if (alpha < 0.5) continue;
+      const offset = i * 4, byteAlpha = rgba[offset + 3], alpha = dither ? 1 : byteAlpha / 255;
+      if (dither ? byteAlpha === 0 : alpha < 0.5) continue;
       const r = Math.round(rgba[offset] * alpha + 255 * (1 - alpha));
       const g = Math.round(rgba[offset + 1] * alpha + 255 * (1 - alpha));
       const b = Math.round(rgba[offset + 2] * alpha + 255 * (1 - alpha));
       const rgb = (r << 16) | (g << 8) | b;
       pixels[i] = rgb;
-      histogram.set(rgb, (histogram.get(rgb) || 0) + 1);
+      if (dither) alphaBytes[i] = byteAlpha;
+      histogram.set(rgb, (histogram.get(rgb) || 0) + (dither ? Math.round(byteAlpha * 256 / 255) : 1));
     }
-    return pixels;
+    return { pixels, alphaBytes };
   });
   const palette = adaptivePalette(histogram);
   const indices = new Map();
@@ -58,8 +62,10 @@ export function encodeGif(project, scale = 1) {
     word(Math.max(2, Math.round(project.frames[index].duration / 10))); byte(0); byte(0);
     byte(0x2C); word(0); word(0); word(width); word(height); byte(0);
     byte(8);
-    const native = Uint8Array.from(frames[index], (rgb) => rgb === -1 ? 0 : indices.get(rgb));
-    block(lzw(scaleIndices(native, project.width, project.height, scale)));
+    const native = Uint8Array.from(frames[index].pixels, (rgb) => rgb === -1 ? 0 : indices.get(rgb));
+    const scaled = scaleIndices(native, project.width, project.height, scale);
+    if (dither) ditherAlpha(scaled, frames[index].alphaBytes, project.width, project.height, scale);
+    block(lzw(scaled));
   }
   byte(0x3B);
   return new Uint8Array(bytes);
@@ -175,4 +181,23 @@ function lzw(pixels) {
   emit(257);
   if (bits) output.push(buffer & 255);
   return output;
+}
+
+const ALPHA_THRESHOLDS = Uint8Array.from({ length: 256 }, (_, index) => {
+  const x = index % 16, y = Math.floor(index / 16);
+  let rank = 0;
+  for (let bit = 0; bit < 4; bit++) {
+    const bx = x >> bit & 1, by = y >> bit & 1;
+    rank = rank * 4 + ((bx ^ by) * 2 + by);
+  }
+  return rank;
+});
+
+function ditherAlpha(indices, alpha, width, height, scale) {
+  const stride = width * scale;
+  for (let y = 0; y < height * scale; y++) for (let x = 0; x < stride; x++) {
+    const coverage = Math.round(alpha[Math.floor(y / scale) * width + Math.floor(x / scale)] * 256 / 255);
+    // A fixed output-space pattern avoids random glitter and leaves opaque art untouched.
+    if (ALPHA_THRESHOLDS[(y & 15) * 16 + (x & 15)] >= coverage) indices[y * stride + x] = 0;
+  }
 }

@@ -139,7 +139,7 @@ The distinction explains why a palette-only proposal can preserve every
 rendered pixel and why GIF builds its own animation-wide palette.
 ([web/lib/model.js:11](../../../web/lib/model.js#L11-L18),
 [web/lib/model.js:80](../../../web/lib/model.js#L80-L86),
-[web/lib/gif.js:16](../../../web/lib/gif.js#L16-L35))
+[web/lib/gif.js:18](../../../web/lib/gif.js#L18-L39))
 
 ## 3. The insight in Python
 
@@ -203,7 +203,7 @@ Sources: ([web/lib/model.js:42](../../../web/lib/model.js#L42-L90),
 [web/app.js:53](../../../web/app.js#L53-L80),
 [server.mjs:47](../../../server.mjs#L47-L54),
 [web/lib/review.js:51](../../../web/lib/review.js#L51-L65),
-[web/lib/gif.js:7](../../../web/lib/gif.js#L7-L35)).
+[web/lib/gif.js:6](../../../web/lib/gif.js#L6-L39)).
 
 ## 5. Real tradeoffs
 

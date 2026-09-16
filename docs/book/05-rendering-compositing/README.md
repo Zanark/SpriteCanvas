@@ -71,7 +71,7 @@ flag. Likewise, frame duration does not alter color blending; it is consumed
 by animation playback/export.
 ([web/lib/model.js:99](../../../web/lib/model.js#L99-L117),
 [web/app.js:44](../../../web/app.js#L44-L48),
-[web/lib/gif.js:56](../../../web/lib/gif.js#L56-L62))
+[web/lib/gif.js:60](../../../web/lib/gif.js#L60-L68))
 
 | Change | Stored cel values change? | Composite can change? |
 |---|---|---|
@@ -209,7 +209,7 @@ revision, not the difference count.
 | GIF | All frames through indexed encoder | Transparent index or opaque white-matted RGB | No |
 
 Sources: ([web/lib/export.js:32](../../../web/lib/export.js#L32-L75),
-[web/lib/gif.js:20](../../../web/lib/gif.js#L20-L35)).
+[web/lib/gif.js:23](../../../web/lib/gif.js#L23-L39)).
 
 PNG and sprite-sheet enlargement disable image smoothing.
 For sheets, `cols=min(columns,frames)` and `rows=ceil(frames/cols)`;
@@ -222,12 +222,16 @@ width and height. The rectangles are derived from the composite; they are
 not original per-layer objects suitable for reconstructing hidden artwork.
 ([web/lib/export.js:43](../../../web/lib/export.js#L43-L52))
 
-GIF applies its alpha threshold only **after** layer compositing.
+The studio's default GIF path applies its alpha threshold only **after** layer compositing.
 Alpha below 0.5 becomes transparent; remaining partial alpha is matted over
 white before RGB quantization. PNG is the safer choice when translucent edges
 must remain translucent on arbitrary backgrounds.
-([web/lib/gif.js:18](../../../web/lib/gif.js#L18-L28),
+([web/lib/gif.js:20](../../../web/lib/gif.js#L20-L32),
 [tests/gif.test.mjs:141](../../../tests/gif.test.mjs#L141-L151))
+
+The README branding export separately opts into ordered alpha dithering:
+transparent samples approximate the glow without a solid matte. This is not
+true partial alpha and does not change the studio's default export policy.
 
 ## 7. Limits and failure paths
 
@@ -236,7 +240,7 @@ either dimension above **16,384**. GIF branches earlier and delegates its
 separate **32,000,000 total frame pixels** budget to `encodeGif`.
 Do not apply the PNG/sheet limit to GIF.
 ([web/lib/export.js:39](../../../web/lib/export.js#L39-L57),
-[web/lib/gif.js:7](../../../web/lib/gif.js#L7-L15))
+[web/lib/gif.js:6](../../../web/lib/gif.js#L6-L17))
 
 A PNG `toBlob` failure raises an explicit smaller-export suggestion.
 Downloaded blobs use object URLs that are revoked after 30 seconds.

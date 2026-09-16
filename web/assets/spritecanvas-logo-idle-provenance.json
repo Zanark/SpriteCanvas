@@ -1,6 +1,6 @@
 {
   "format": "spritecanvas-logo-idle-provenance",
-  "version": 2,
+  "version": 3,
   "cameraSource": "spritecanvas-logo-provenance.json",
   "motionReference": {
     "file": "3286115_dynamotoon_goomba.gif",
@@ -11,7 +11,11 @@
   "transformation": "Original scout artwork posed into a reference-inspired in-place waddle: foot plants, forward soles, body bob and restrained helmet lean. Reference character pixels are not copied.",
   "durationMs": 880,
   "scale": 16,
-  "gifMatte": "#1E2125",
+  "gifTransparency": {
+    "mode": "ordered-alpha-dither",
+    "matrixSize": 16,
+    "matte": null
+  },
   "poses": [
     {
       "name": "left-plant",

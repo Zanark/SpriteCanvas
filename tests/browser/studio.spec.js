@@ -334,8 +334,8 @@ test('GitHub Pages subpath works without a bridge; offline proposal round trip a
   await page.goto('http://127.0.0.1:4274/SpriteCanvas/');
   await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
   await expect(page.locator('#bridge-badge')).toHaveText('STATIC');
-  await expect(page.locator('#project-name')).toHaveText('Golden helmet');
-  await expect(page.locator('#layers .layer')).toHaveCount(3);
+  await expect(page.locator('#project-name')).toHaveText('Untitled sprite');
+  await expect(page.locator('#layers .layer')).toHaveCount(1);
   await page.screenshot({ path: path.join('test-results', 'studio-desktop.png'), fullPage: true });
   const baseline = await currentProjectDownload(page);
   const candidate = applyOperations(baseline, [{ op: 'layer', name: 'Agent sparkle' }, { op: 'pixel', x: 14, y: 14, color: '#FFF052' }]);

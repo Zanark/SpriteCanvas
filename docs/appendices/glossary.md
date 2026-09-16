@@ -159,7 +159,7 @@ The storage helper, save loop, and server define these mechanisms.
 
 These definitions describe the actual encoder, including deliberate quality
 and compression tradeoffs.
-([web/lib/gif.js:7](../../web/lib/gif.js#L7-L178))
+([web/lib/gif.js:6](../../web/lib/gif.js#L6-L184))
 
 | Term | Explanation | Read next |
 |---|---|---|
@@ -197,7 +197,7 @@ Two million editable cells, 32 million GIF output pixels, and a 32 MiB
 request-body limit are not interchangeable. The first includes layers,
 the second includes scale squared, and the third depends on serialized bytes.
 ([web/lib/model.js:51](../../web/lib/model.js#L51-L53),
-[web/lib/gif.js:13](../../web/lib/gif.js#L13-L15),
+[web/lib/gif.js:15](../../web/lib/gif.js#L15-L17),
 [server.mjs:59](../../server.mjs#L59-L68))
 
 Likewise, an implemented algorithm, an assertion in a test, and a measurement

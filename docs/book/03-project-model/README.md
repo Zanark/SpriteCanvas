@@ -203,7 +203,7 @@ GIF proves the separation: it builds a histogram from composited pixels.
 The exact-color test empties the editor palette and requires identical GIF
 bytes. This is not a claim that all RGBA colors survive GIF conversion;
 alpha reduction and quantization are separate operations.
-([web/lib/gif.js:16](../../../web/lib/gif.js#L16-L35),
+([web/lib/gif.js:18](../../../web/lib/gif.js#L18-L39),
 [tests/gif.test.mjs:94](../../../tests/gif.test.mjs#L94-L110))
 
 ## 5. Normalization and equality

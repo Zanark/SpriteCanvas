@@ -6,7 +6,7 @@
 
 **A pixel-art studio where you draw, animate, and review an agent's changes without giving up your original.**
 
-The scout above is the application's own editable character logo, not a screenshot pasted over the editor. Its 16x idle GIF uses a dark presentation backdrop to preserve the warm flare: GIF cannot store partial transparency. The [static PNG](web/assets/spritecanvas-logo.png), application logo and editable source remain transparent. The studio uses native browser modules and Canvas; the optional local bridge uses Node built-ins. There is no account, cloud storage, public AI key, external font, tracking script, or embedded AI model.
+The scout above is the application's own editable character logo, not a screenshot pasted over the editor. Its 16x idle GIF has **no solid backdrop**: fine transparent dithering approximates the warm flare's partial alpha. GIF cannot store true partial transparency, so the glow has a subtle stippled texture. The [static PNG](web/assets/spritecanvas-logo.png), application logo and editable source retain full alpha. The studio uses native browser modules and Canvas; the optional local bridge uses Node built-ins. There is no account, cloud storage, public AI key, external font, tracking script, or embedded AI model.
 
 ![SpriteCanvas studio with a four-frame helmet animation study](docs/assets/screenshots/studio-overview.png)
 
@@ -75,6 +75,8 @@ npm start
 
 Run that command from the repository root, then open **http://127.0.0.1:4173**. A fresh local workspace starts blank. You should see **LOCAL LIVE** in the Co-create panel once the browser detects the bridge.
 
+On the static website, a fresh browser session with no saved workspace starts with an **empty 32 x 32 canvas**, one layer and one frame. The helmet sample loads only when you choose **Open reference artwork**. Existing saved canvases are restored, not cleared by an update; use **New** if you want to replace an already-loaded sample.
+
 Keep the process running while drawing or collaborating. Stop with Ctrl+C. To use a different port:
 
 ```powershell
@@ -133,7 +135,7 @@ Helmet/face, joined eyes, earpiece, boots, warm headlamp and camera flare remain
 
 The README uses a **16x idle GIF (512 x 512)**: an eight-pose, 880ms bouncy waddle inspired by the supplied motion reference. Alternating planted boots and forward-facing soles, a two-pixel body bob and restrained helmet lean make it a proper pose animation rather than just a blink. Original helmet colors, wide eyes, 2x2 pupils and blue earpiece remain intact; both boots share matching templates for each view.
 
-The [eight-frame editable animation](web/assets/spritecanvas-logo-idle.spritecanvas.json) has eight layers, including separate stepping legs and a soft grounding shadow. The original warm flare follows the lamp without changing color. Only the GIF export receives a dark matte so the flare remains visible; static application branding is unchanged.
+The [eight-frame editable animation](web/assets/spritecanvas-logo-idle.spritecanvas.json) has eight layers, including separate stepping legs and a soft grounding shadow. The original warm flare follows the lamp without changing color. The GIF now uses transparent alpha dithering instead of a dark matte; opaque character pixels, poses, timing and static application branding are unchanged.
 
 Run `npm run brand` to regenerate the idle GIF, static flared SVG/PNG and separate flare-free favicon, then `npm run build`. The app's 64px logo and 20 x 20 native favicon are unchanged. A transparent 32x PNG (1024 x 1024) remains available as a still image. The README declares the GIF's actual 512px dimensions; a Markdown host may fit it to the reading column.
 
@@ -173,7 +175,7 @@ Pixel scale enlarges output blocks; it does not add drawing detail. A 50 x 50 sp
 
 For example, `100 * 80 * 13 * 16 * 16 = 26,624,000` scaled frame pixels. That thirteen-frame animation fits the GIF limit at 16x. The **same calculation does not include layer count** because GIF sees composited frames; the editable-cell limit does include layers.
 
-Rotation currently requires a square canvas or square selection. GIF rounds durations to 10ms steps; alpha below 50% is transparent, while remaining partial alpha is matted against white. For precise transparency or further edits, retain PNG/project files. The [GIF chapter](docs/book/09-gif-quantization/README.md) explains why animation-wide quantization avoids the old fixed-palette color crushing.
+Rotation currently requires a square canvas or square selection. The studio's default GIF export rounds durations to 10ms steps; alpha below 50% is transparent, while remaining partial alpha is matted against white. The README logo uses a separate opt-in alpha-dither mode instead. For precise transparency or further edits, retain PNG/project files. The [GIF chapter](docs/book/09-gif-quantization/README.md) explains both alpha policies and animation-wide quantization.
 
 ## Collaborate with this agent
 

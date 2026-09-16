@@ -52,6 +52,13 @@ npm run agent -- status --url http://127.0.0.1:4180
 
 A browser opened on a static host cannot use a remote filesystem bridge merely because another machine runs one. Do not expose the loopback bridge publicly to work around that distinction.
 
+## The sample still appears after an update
+
+Fresh static sessions now start blank. If you still see the helmet sample, it
+may already be saved in this browser. Use **New** to replace it deliberately.
+Startup does not delete saved projects or guess whether an unchanged sample
+was originally loaded automatically or intentionally.
+
 ## The brush does nothing
 
 Pause playback. Confirm the active layer is visible and unlocked. Check the selected frame and clear an unintended selection.

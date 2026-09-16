@@ -131,16 +131,17 @@ saved revision, and browser-origin checks do not replace one another.
 |---|---|---|
 | `renderPixels`, `projectCanvas` | [export.js](../../web/lib/export.js#L4-L12) | Native RGBA looks different from presentation |
 | `exportProject` | [export.js](../../web/lib/export.js#L32-L75) | Format dispatch, PNG/sheet dimensions, SVG alpha, metadata |
-| `encodeGif` | [gif.js](../../web/lib/gif.js#L7-L65) | Limits, native histogram input, container/timing/disposal |
-| `adaptivePalette` | [gif.js](../../web/lib/gif.js#L68-L88) | Exact-color fast path and highest-gain box selection |
-| `colorBox` | [gif.js](../../web/lib/gif.js#L90-L131) | Channel marginal bins and frequency-weighted split mathematics |
-| `nearestColor` | [gif.js](../../web/lib/gif.js#L133-L144) | Weighted distance and deterministic ties |
-| `scaleIndices` | [gif.js](../../web/lib/gif.js#L146-L159) | Nearest-neighbor enlargement after quantization |
-| `lzw` | [gif.js](../../web/lib/gif.js#L161-L178) | Clear intervals, literal 9-bit codes, bit packing |
+| `encodeGif` | [gif.js](../../web/lib/gif.js#L6-L71) | Limits, native histogram input, container/timing/disposal |
+| `adaptivePalette` | [gif.js](../../web/lib/gif.js#L74-L94) | Exact-color fast path and highest-gain box selection |
+| `colorBox` | [gif.js](../../web/lib/gif.js#L96-L137) | Channel marginal bins and frequency-weighted split mathematics |
+| `nearestColor` | [gif.js](../../web/lib/gif.js#L139-L150) | Weighted distance and deterministic ties |
+| `scaleIndices` | [gif.js](../../web/lib/gif.js#L152-L165) | Nearest-neighbor enlargement after quantization |
+| `lzw` | [gif.js](../../web/lib/gif.js#L167-L184) | Clear intervals, literal 9-bit codes, bit packing |
+| `ALPHA_THRESHOLDS`, `ditherAlpha` | [gif.js](../../web/lib/gif.js#L186-L203) | Stable output-space transparency coverage without a background matte |
 
 For the mathematics and resource model, read [GIF quantization](../book/09-gif-quantization/README.md).
 For original versus derived alpha, read [compositing](../book/05-rendering-compositing/README.md).
-([web/lib/gif.js:90](../../web/lib/gif.js#L90-L131),
+([web/lib/gif.js:96](../../web/lib/gif.js#L96-L137),
 [web/lib/export.js:39](../../web/lib/export.js#L39-L57))
 
 ## 5. Test evidence matrix

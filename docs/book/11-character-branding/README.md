@@ -9,12 +9,12 @@
 ```mermaid
 flowchart LR
     accTitle: Editable source to application branding
-    accDescr: Camera-frame and editable idle projects feed the brand generator. The app SVG and static PNG retain transparent flare, the favicon removes flare, and the 16x idle GIF uses an export-only dark matte.
+    accDescr: Camera-frame and editable idle projects feed the brand generator. The app SVG and static PNG retain full alpha, the favicon removes flare, and the idle GIF approximates flare alpha with transparent dithering and no matte.
     P["32x32 camera-frame crop"] --> G["npm run brand"]
     I["Editable eight-pose waddle"] --> G
     G --> S["Flared header SVG"]
     G --> N["Static 32x PNG"]
-    G -->|GIF-only dark matte| D["16x idle GIF - 512x512"]
+    G -->|Transparent alpha dithering| D["16x idle GIF - 512x512"]
     G -->|Remove flare and crop| F["Clean SVG favicon"]
     S --> W["Static web build"]
     N --> W
@@ -62,7 +62,7 @@ The user rejected the blink-only idle as too weak and supplied a motion referenc
 
 ![The original scout's reference-inspired eight-pose waddle with warm moving headlamp flare](../../../web/assets/spritecanvas-logo-idle.gif)
 
-**Figure 2 - The README animation.** This is the actual16x GIF, with an export-only dark backdrop. Each pose lasts110ms, matching the eight-frame reference's880ms rhythm.
+**Figure 2 - The README animation.** This is the actual16x GIF, now transparent with no solid backdrop. Each pose lasts110ms, matching the eight-frame reference's880ms rhythm.
 
 | Pose | Body offset | Planted boot | Forward sole |
 | --- | --- | --- | --- |
@@ -81,7 +81,9 @@ The original optical flare translates with the lamp, including its ring and stre
 
 [Animation provenance](../../../web/assets/spritecanvas-logo-idle-provenance.json) records the supplied reference's filename/hash, observed eight110ms frames, authored scout poses, shared boot templates, transforms and output frame hashes. The reference file is not shipped or loaded by the application.
 
-GIF supports binary transparency, not the partial alpha used by the warm optical effect. The [idle exporter](../../../scripts/brand-idle.mjs) adds a `#1E2125` **export-only matte**, then uses the existing animation-wide GIF quantizer at16x. The matte is not inserted into either editable source or the app/favicon assets. Without it, the low-alpha flare would disappear or acquire a white fringe. This is a display-format tradeoff, not a restored sewer background.
+The user rejected the dark GIF backdrop. The [idle exporter](../../../scripts/brand-idle.mjs) now selects `alphaMode: 'dither'` with **no matte layer**. GIF supports only fully opaque or fully transparent pixels, so a fixed16x16 ordered mask approximates the flare's alpha at the output resolution. For a source alpha byte `a`, `round(a * 256 / 255)` samples remain visible in each16x native-pixel block.
+
+Opaque character blocks stay solid and unchanged; zero-alpha blocks are completely transparent. Partial-alpha glow and shadow use fine stippling, allowing the page background to show through rather than embedding a black rectangle. The pattern is deterministic across frames. This is an approximation, not lossless RGBA; PNG/SVG and editable projects retain the original alpha. The studio's ordinary GIF export keeps its existing threshold/white-matte policy.
 
 ## Anatomy invariants
 
@@ -113,7 +115,7 @@ Static template placement is left origin(8,22), right origin(16,22), with an8x3 
 
 Transparency is alpha/null. Black is a color used in the face, outline, pupils and leg. Remove backgrounds by selecting the intended layers, not by deleting all pixels near a background color.
 
-Neither editable source contains a sewer, frame, floor or opaque backdrop. The main logo deliberately includes translucent camera-flare pixels, which can reach the crop's edge. Only the tightly cropped favicon has a completely clear padded border. The README GIF alone has the explicitly documented presentation matte.
+Neither editable source nor the README GIF contains a sewer, frame, floor or opaque backdrop. The main logo deliberately includes camera-flare pixels, which can reach the crop's edge. Only the tightly cropped favicon has a completely clear padded border. Sparse dithered flare pixels at a GIF edge are not a solid background.
 
 ## Editing and regenerating
 
@@ -144,7 +146,7 @@ Do not replace the transparent source with an external logo URL, a generated scr
 
 ## Validation that checks the actual requirement
 
-The [static tests](../../../tests/brand.test.mjs#L1) inspect unchanged source hashes, anatomy, asset reproduction and32x PNG pixels. The [animation tests](../../../tests/brand-idle.test.mjs) verify all eight poses,880ms timing, original component pixels,2x2 pupils, matching boot views, grounded support feet, body displacement, lamp/flare tracking, frame hashes and the export-only matte. Merely changing a blink or glow cannot satisfy these checks.
+The [static tests](../../../tests/brand.test.mjs#L1) inspect unchanged source hashes, anatomy, asset reproduction and32x PNG pixels. The [animation tests](../../../tests/brand-idle.test.mjs) verify all eight poses,880ms timing, original component pixels,2x2 pupils, matching boot views, grounded support feet, body displacement, lamp/flare tracking, frame hashes and the absence of a matte. Browser decoding checks exact transparent coverage in every16x block, stable opaque RGB and appearance on light/dark pages. Merely changing a blink or glow cannot satisfy the motion checks.
 
 They also regenerate assets and compare them to the shipped SVG/PNG/favicon. Text comparisons tolerate checkout line-ending normalization; binary PNG comparisons remain exact.
 
