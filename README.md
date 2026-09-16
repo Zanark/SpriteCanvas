@@ -1,10 +1,10 @@
 # SpriteCanvas
 
-<img src="web/assets/spritecanvas-logo.png" width="1024" height="1024" alt="The original camera-facing SpriteCanvas scout with its warm headlamp lens flare, at 32x native scale">
+<img src="web/assets/spritecanvas-logo-idle.gif" width="512" height="512" alt="The SpriteCanvas scout performs a bouncy eight-pose waddle with alternating foot plants and a moving warm headlamp flare, at 16x native scale">
 
 **A pixel-art studio where you draw, animate, and review an agent's changes without giving up your original.**
 
-The scout above is the application's own transparent, editable character logo, not a screenshot pasted over the editor. The studio uses native browser modules and Canvas; the optional local bridge uses Node built-ins. There is no account, cloud storage, public AI key, external font, tracking script, or embedded AI model.
+The scout above is the application's own editable character logo, not a screenshot pasted over the editor. Its 16x idle GIF uses a dark presentation backdrop to preserve the warm flare: GIF cannot store partial transparency. The [static PNG](web/assets/spritecanvas-logo.png), application logo and editable source remain transparent. The studio uses native browser modules and Canvas; the optional local bridge uses Node built-ins. There is no account, cloud storage, public AI key, external font, tracking script, or embedded AI model.
 
 ![SpriteCanvas studio with a four-frame helmet animation study](docs/assets/screenshots/studio-overview.png)
 
@@ -129,7 +129,11 @@ The logo uses the **original straight-into-camera pose from frame 8 of the lates
 
 Helmet/face, joined eyes, earpiece, boots, warm headlamp and camera flare remain six separate editable pixel layers in [`spritecanvas-logo.spritecanvas.json`](web/assets/spritecanvas-logo.spritecanvas.json). It is an exact 32 x 32 crop with ten deliberate working swatches: no reposing, resampling or recoloring. The crop keeps the ring, rays and nearby ghost; the full-scene flare beyond the icon boundary is outside this framing. [Extraction provenance](web/assets/spritecanvas-logo-provenance.json) records the GIF/frame and pixel hashes.
 
-Run `npm run brand` to regenerate the flared SVG, **32x README PNG (1024 x 1024)** and separate flare-free favicon, then `npm run build`. The README image declares its full 32x dimensions; a Markdown host may fit it to the reading column. The application uses a 64px, integer-2x view. The favicon tightly crops the character to 20 x 20 native pixels with transparent padding. No background or screenshot is baked into the artwork.
+The README uses a **16x idle GIF (512 x 512)**: an eight-pose, 880ms bouncy waddle inspired by the supplied motion reference. Alternating planted boots and forward-facing soles, a two-pixel body bob and restrained helmet lean make it a proper pose animation rather than just a blink. Original helmet colors, wide eyes, 2x2 pupils and blue earpiece remain intact; both boots share matching templates for each view.
+
+The [eight-frame editable animation](web/assets/spritecanvas-logo-idle.spritecanvas.json) has eight layers, including separate stepping legs and a soft grounding shadow. The original warm flare follows the lamp without changing color. Only the GIF export receives a dark matte so the flare remains visible; static application branding is unchanged.
+
+Run `npm run brand` to regenerate the idle GIF, static flared SVG/PNG and separate flare-free favicon, then `npm run build`. The app's 64px logo and 20 x 20 native favicon are unchanged. A transparent 32x PNG (1024 x 1024) remains available as a still image. The README declares the GIF's actual 512px dimensions; a Markdown host may fit it to the reading column.
 
 The logo is a **separate project**; changing branding does not replace the scene on your canvas. See [Character anatomy and branding](docs/book/11-character-branding/README.md) for the source, pose, generation path and preservation rules.
 

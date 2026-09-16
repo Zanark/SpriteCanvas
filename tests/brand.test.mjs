@@ -64,12 +64,10 @@ test('shipped logo SVG, PNG and favicon are reproducible from the editable sourc
   assert.deepEqual(await readFile(file('assets/spritecanvas-logo.png')), png);
   assert.equal(png.readUInt32BE(16), source.width * 32);
   assert.equal(png.readUInt32BE(20), source.height * 32);
-  const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
-  assert.match(readme, /<img src="web\/assets\/spritecanvas-logo\.png" width="1024" height="1024"/);
   assert.doesNotMatch(svg, /<image|data:|https?:\/\/(?!www\.w3\.org\/2000\/svg)/);
 });
 
-test('README PNG contains exact 32 by 32 nearest-neighbor blocks, including flare alpha', async () => {
+test('static PNG contains exact 32 by 32 nearest-neighbor blocks, including flare alpha', async () => {
   const png = await readFile(file('assets/spritecanvas-logo.png')), chunks = [];
   for (let offset = 8; offset < png.length;) {
     const length = png.readUInt32BE(offset);

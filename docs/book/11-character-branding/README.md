@@ -1,6 +1,6 @@
 # 11 - The scout: anatomy, pose and editable branding
 
-> **TL;DR:** The logo is an exact32x32 crop of the original camera-facing pose from the latest character GIF, not a newly invented pose. The application and32x README image keep the warm lens flare; the favicon alone removes it. Six editable layers preserve the original character, lamp and optical effect.
+> **TL;DR:** The application keeps the exact camera-facing static logo. The README shows a16x,512px reference-inspired waddle with alternating boots, body bob, subtle helmet lean and a moving warm flare. The static logo has six editable layers; the eight-frame animation has eight, adding legs and a grounding shadow. The favicon still omits flare.
 
 [Book home](../../README.md) | [Previous: Testing and deployment](../10-testing-deployment/README.md) | [Next: Editable pixels](../12-design-principles/editable-pixels.md)
 
@@ -9,13 +9,16 @@
 ```mermaid
 flowchart LR
     accTitle: Editable source to application branding
-    accDescr: A camera-frame crop feeds the brand generator. The application SVG and 32x README PNG retain the flare; the favicon removes only that layer and tightly crops the unchanged character.
+    accDescr: Camera-frame and editable idle projects feed the brand generator. The app SVG and static PNG retain transparent flare, the favicon removes flare, and the 16x idle GIF uses an export-only dark matte.
     P["32x32 camera-frame crop"] --> G["npm run brand"]
+    I["Editable eight-pose waddle"] --> G
     G --> S["Flared header SVG"]
-    G --> N["32x PNG - 1024x1024"]
+    G --> N["Static 32x PNG"]
+    G -->|GIF-only dark matte| D["16x idle GIF - 512x512"]
     G -->|Remove flare and crop| F["Clean SVG favicon"]
     S --> W["Static web build"]
     N --> W
+    D --> W
     F --> W
     A["Private active scene"] -. "No replacement or acceptance" .-> P
 ```
@@ -49,9 +52,36 @@ The crop starts at source coordinate(34,30) and measures32x32. Character, lamp a
 
 The icon framing retains the central ring, rays, streak and nearby optical ghost. The full-scene flare beyond the crop boundary is outside the icon; no replacement flare is drawn.
 
-The application displays a64x64, integer2x view. The README PNG is **32x native scale:1024x1024**, with matching HTML width/height rather than the previous96px thumbnail. A Markdown host can still fit the image to its reading column.
+The application displays a64x64, integer2x view. The README now uses a **16x idle GIF:512x512**, with matching HTML width/height. A transparent32x PNG remains a still-image alternative, not the README hero. A Markdown host can fit the image to its reading column.
 
 The favicon uses the same source with only `camera-lens-flare` excluded, then tightly crops the character with two native pixels of transparent padding. Its current native frame is20x20. It does not use another pose or alter the actual headlamp.
+
+## The README pose-animation loop
+
+The user rejected the blink-only idle as too weak and supplied a motion reference. The revised [`spritecanvas-logo-idle.spritecanvas.json`](../../../web/assets/spritecanvas-logo-idle.spritecanvas.json) is a separate eight-frame, eight-layer editable project. It adapts the reference's footwork, body bob and weight shifts to the original scout; it does not copy the reference character's pixels or design.
+
+![The original scout's reference-inspired eight-pose waddle with warm moving headlamp flare](../../../web/assets/spritecanvas-logo-idle.gif)
+
+**Figure 2 - The README animation.** This is the actual16x GIF, with an export-only dark backdrop. Each pose lasts110ms, matching the eight-frame reference's880ms rhythm.
+
+| Pose | Body offset | Planted boot | Forward sole |
+| --- | --- | --- | --- |
+| Left plant | Left1, neutral height | Left | Right, low |
+| Left rise | Left1, up1 | Left | Right, rising |
+| Right pass | Center, up2 | Left | Right, high |
+| Right reach | Right1, up1 | Left | Right, lowering |
+| Right plant | Right1, neutral height | Right | Left, low |
+| Right rise | Right1, up1 | Right | Left, rising |
+| Left pass | Center, up2 | Right | Left, high |
+| Left reach | Left1, up1 | Right | Left, lowering |
+
+Helmet, eyes, earpiece and lamp use the original pixel colors. Integer translations and a restrained row-wise helmet lean create motion without resampling or shrinking the2x2 pupils. Both boots reuse the same8x3 planted template and the same8x5 forward-sole template. Apparent differences are views/poses, not differently sized matching boots. Short legs connect the body to the boots, and a separate translucent shadow keeps the step grounded.
+
+The original optical flare translates with the lamp, including its ring and streak; it is not pinned to the old screen position. RGB and alpha are unchanged. Cropping happens after translation using the original optical layer, avoiding artificial gaps at the crop boundary.
+
+[Animation provenance](../../../web/assets/spritecanvas-logo-idle-provenance.json) records the supplied reference's filename/hash, observed eight110ms frames, authored scout poses, shared boot templates, transforms and output frame hashes. The reference file is not shipped or loaded by the application.
+
+GIF supports binary transparency, not the partial alpha used by the warm optical effect. The [idle exporter](../../../scripts/brand-idle.mjs) adds a `#1E2125` **export-only matte**, then uses the existing animation-wide GIF quantizer at16x. The matte is not inserted into either editable source or the app/favicon assets. Without it, the low-alpha flare would disappear or acquire a white fringe. This is a display-format tradeoff, not a restored sewer background.
 
 ## Anatomy invariants
 
@@ -75,15 +105,15 @@ Keeping it on its own layer makes that intention discoverable to future artists 
 
 ### The front-facing feet stay equal and level
 
-The two boots use the same shape and corresponding colors at the exact camera-frame positions. There is no raised foot, bent leg or invented hop in this logo.
+The **static logo** keeps both boots equal and level at the exact camera-frame positions. The README animation now deliberately uses alternating foot plants and lifted soles, as requested through the supplied pose reference.
 
-Current template placement is left origin(8,22), right origin(16,22), with an8x3 source region per boot. Tests compare both regions and the recorded extraction hashes; a plausible screenshot is not enough to prove the source pose was preserved.
+Static template placement is left origin(8,22), right origin(16,22), with an8x3 region per boot. Animation tests separately verify shared templates for both feet in each view and a fixed planted-boot ground line. Do not confuse a lifted sole with a mismatched frontal boot.
 
 ### Transparent does not mean black is disposable
 
 Transparency is alpha/null. Black is a color used in the face, outline, pupils and leg. Remove backgrounds by selecting the intended layers, not by deleting all pixels near a background color.
 
-There is no sewer, frame, floor or opaque backdrop. The main logo deliberately includes translucent camera-flare pixels, which can reach the crop's edge. Only the tightly cropped favicon has a completely clear padded border.
+Neither editable source contains a sewer, frame, floor or opaque backdrop. The main logo deliberately includes translucent camera-flare pixels, which can reach the crop's edge. Only the tightly cropped favicon has a completely clear padded border. The README GIF alone has the explicitly documented presentation matte.
 
 ## Editing and regenerating
 
@@ -98,7 +128,7 @@ npm run brand
 npm run build
 ```
 
-The [pure brand generator](../../../scripts/brand.mjs) validates the source and composites it into pixel rectangles for SVG and a32x PNG. It derives the separate favicon after removing the flare layer. The [build entry point](../../../scripts/build-brand.mjs#L1) writes all three assets.
+The [static generator](../../../scripts/brand.mjs) creates the SVG,32x PNG and cropped clean favicon. The [idle generator](../../../scripts/brand-idle.mjs) creates the16x GIF from the animated source. The [build entry point](../../../scripts/build-brand.mjs#L1) writes all four assets without reading the private workspace.
 
 The generator requires a square single-frame source with a visible camera-flare layer. It does not author a pose, accept a scene proposal, extract arbitrary screenshots or read private workspace art. Keep the recorded camera-pose pixels intact unless a later explicit request authorizes a change.
 
@@ -114,16 +144,16 @@ Do not replace the transparent source with an external logo URL, a generated scr
 
 ## Validation that checks the actual requirement
 
-The [brand tests](../../../tests/brand.test.mjs#L1) inspect camera-frame provenance/pixel hashes, dimensions, six editable layers, pupil blocks, earpiece colors and equal level boots. They verify the warm flare is present in the main source but absent from the favicon and check the PNG and README's actual32x dimensions.
+The [static tests](../../../tests/brand.test.mjs#L1) inspect unchanged source hashes, anatomy, asset reproduction and32x PNG pixels. The [animation tests](../../../tests/brand-idle.test.mjs) verify all eight poses,880ms timing, original component pixels,2x2 pupils, matching boot views, grounded support feet, body displacement, lamp/flare tracking, frame hashes and the export-only matte. Merely changing a blink or glow cannot satisfy these checks.
 
 They also regenerate assets and compare them to the shipped SVG/PNG/favicon. Text comparisons tolerate checkout line-ending normalization; binary PNG comparisons remain exact.
 
 Browser coverage loads assets under the Pages subpath, checks alpha and premultiplied color against the appropriate flared/clean composite, and confirms the64px header image at desktop and narrow viewports. Premultiplied comparison accounts for browser rounding of very translucent flare pixels without hiding a missing flare.
 
 ```powershell
-node --test tests\brand.test.mjs
+node --test tests\brand.test.mjs tests\brand-idle.test.mjs
 npm run build
-npm run test:browser -- --grep "character branding|GitHub Pages subpath"
+npm run test:browser -- --grep "character branding|GitHub Pages subpath|README idle"
 npm run docs:screenshots
 npm run docs:check
 ```

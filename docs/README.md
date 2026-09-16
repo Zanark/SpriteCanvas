@@ -85,7 +85,7 @@ flowchart LR
 
 ### 11 - Character anatomy and branding
 
-[The editable scout](book/11-character-branding/README.md): the original camera-facing GIF pose, flared application/32x README logo, flare-free favicon, transparent layered source and reproducible assets.
+[The editable scout](book/11-character-branding/README.md): the original camera-facing app logo, reference-inspired 16x README waddle, flare-free favicon, editable anatomy and reproducible assets.
 
 ### 12 - Design principles
 
