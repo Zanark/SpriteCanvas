@@ -1,0 +1,28 @@
+{
+  "format": "spritecanvas-logo-provenance",
+  "version": 1,
+  "sourceGif": "finished-character-candidate.gif",
+  "gifSha256": "2f2184304e357e5852f1867a7e8e4ef1902861fd38118aa738fa83e1366faa84",
+  "sourceFrameIndex": 7,
+  "sourceFrameId": "lookaround-8",
+  "sourceFrameDimensions": [
+    100,
+    80
+  ],
+  "crop": {
+    "x": 34,
+    "y": 30,
+    "width": 32,
+    "height": 32
+  },
+  "transformation": "Exact pixel crop and layer separation; no reposing, resampling or recoloring.",
+  "framing": "The icon crop retains the lamp ring, rays and nearby ghost. The full-scene flare outside this crop is not part of the icon.",
+  "layerHashes": {
+    "scout-boots": "93951a1b1334c2d506a804c9ae0d9741222dfffa4ea768361fbfb2565fa66434",
+    "scout-head": "afe900494de517c52694a3800c683a3d957a4bd592ed83cd076845eca041f3a1",
+    "scout-eyes": "380201a78b5288cf9e81553413c20ab1545eb96e3b0812179210bf5151a489d8",
+    "scout-earpiece": "7ac8ff6e87b00d8e9408111cfef4847b19fb44610bec987e1813908d04896d4b",
+    "scout-lamp": "74486fc976c9c7a051a3bb548a0133fd51806c9e00369f8da48b664b39018cac",
+    "camera-lens-flare": "3c28d0ab078db457f7e94df2a827dff6303c57bdaa0539397456c2225b1ea6ee"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "kind": "real-ui-documentation-capture",
+  "fixtureSources": [
+    "web/examples/helmet.spritecanvas.json",
+    "web/assets/spritecanvas-logo.spritecanvas.json"
+  ],
+  "sourceHashes": {
+    "web/examples/helmet.spritecanvas.json": "34bd50943ec0d55c6f69e37b3c599572e92fb1b49acc37d4f3e00d3ed53d5460",
+    "web/assets/spritecanvas-logo.spritecanvas.json": "897576262dd830072799be42e17524f6403bbcbbc2e632c52624d55cd3a1daed",
+    "web/index.html": "ef6280bbf575d3579b5ebd798a306f3dc437f2ce43c0e48ad67638012c8f45c0",
+    "web/app.js": "bcf4ec047dabc1d4e1ded2da9d6f599ca21bf79930b669bd370b9a268f0d5915",
+    "web/styles.css": "e8acc986d07e5c7deb048de86993b07f39ebaeb74248c957efeb3297abf117fb",
+    "web/palette.css": "c682f303549ebf71dcb9e32fbdcb434614a38db4a49fd891e97a1d90c53e3cd8",
+    "web/review.css": "2999368983ea7ca82ec698b01b9457c15d8b478aa6d0325ad260ea7e40aeee2a",
+    "web/lib/model.js": "4f45fe7e21992bb3a0a6b0d635f76160bb4b6d87ee1d683a5fc02d65687df321",
+    "web/lib/export.js": "2d259b2e2a9c3659bbee699fc2d790c18c894d4241db227236f39bcffbd155ff",
+    "web/lib/gif.js": "19bfdba79df17f2f8bf831c95c8ec3a0dda3f5698c22b1a443384aea6fb8001b",
+    "web/lib/review.js": "f9606d0bb0f97bdc4480f0d9f1e245777b79507c080b1c1ced89883815620605",
+    "web/lib/storage.js": "db79f21b7cb894de14e3bafc30f10bb978740e5889f48da25826871d88b451cd",
+    "web/assets/spritecanvas-logo.svg": "f674712d070d4e170bc79e63b18ffccb64e40d80694c5e0f5ed6284d2df48058",
+    "web/assets/spritecanvas-logo.png": "c82f84ae7f188aa147d0f1b566f2e0a29fb4332d72300fdacc8d629cc7a26ed9",
+    "tests/docs/screenshots.spec.js": "691ddee2c69653089f6f2137035c32968896a3badb23578e0bf3a85500e28614",
+    "playwright.docs.config.js": "741d551a017cbf2ae2cbbc5ca74bf3ff993d410193236267a393914777fce034"
+  },
+  "isolation": {
+    "port": 4373,
+    "workspace": "test-results/docs-workspace",
+    "privateWorkspaceRead": false,
+    "externalRequests": 0
+  },
+  "images": [
+    {
+      "file": "studio-overview.png",
+      "caption": "The real studio with the bundled helmet reconstruction and a generated four-frame twinkle study. This is documentation sample artwork, not the private workspace.",
+      "width": 1440,
+      "height": 1050,
+      "sha256": "40a50a9ba3025220a7ef0ce3f8b47b3bff0b9a986a23a02b80bb04c379db8006"
+    },
+    {
+      "file": "selection-workflow.png",
+      "caption": "A marquee bounds work on the active cel; the selection does not flatten or combine the layers.",
+      "width": 1440,
+      "height": 1050,
+      "sha256": "9940688dcebee8d56f3551016a8d91df97293af78e8a144a8384ed26126b2648"
+    },
+    {
+      "file": "export-options.png",
+      "caption": "The actual export dialog, configured for a looping GIF at 16x. Its notes explain palette, transparency and timing tradeoffs.",
+      "width": 520,
+      "height": 466,
+      "sha256": "0d6d7a9c98ee1f0a023dcca5e42cbb26d4402d645b9b48685c7cfed49613c33b"
+    },
+    {
+      "file": "compare-versions.png",
+      "caption": "Side-by-side proposal review in the actual UI. Both versions are generated documentation fixtures; the baseline remains unchanged.",
+      "width": 1040,
+      "height": 766,
+      "sha256": "e146891c2ed2479ed9e6052260298d682ff8e26afe8e4b2fb3bf4cd7e20b57fd"
+    },
+    {
+      "file": "pixel-difference.png",
+      "caption": "Pixel difference isolates the proposed sparkle changes. Structural changes are listed separately below the images.",
+      "width": 1040,
+      "height": 766,
+      "sha256": "ca1020d3292aa6162e4499ab859be569598cd927f973034b7b21c7fd71b14e3f"
+    },
+    {
+      "file": "request-changes.png",
+      "caption": "A sample feedback draft with a bundled logo reference. Saving a request records guidance; it does not automatically message the agent.",
+      "width": 1040,
+      "height": 1046,
+      "sha256": "3814473386a94be0130fe0b9c915b0c2f79d7641140e323904ab1cadfafc39cd"
+    },
+    {
+      "file": "studio-mobile.png",
+      "caption": "The same studio at a 390px viewport. The workspace reorganizes vertically; screenshots do not imply touch-device certification.",
+      "width": 390,
+      "height": 844,
+      "sha256": "26234d7d97f8af38cf68405d65097ef3035e259dba3259de2c6f71b03e188872"
+    },
+    {
+      "file": "editable-logo.png",
+      "caption": "The original camera-facing GIF pose opened as six editable layers, including the warm lens flare. The favicon alone omits the flare.",
+      "width": 1440,
+      "height": 1050,
+      "sha256": "91064efe47437fa302ecef409ee335fe896d95306fa14a2c5f7cff5884cddaa5"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.spritecanvas/
+.agent-context/
+playwright-report/
+test-results/
+*.tmp

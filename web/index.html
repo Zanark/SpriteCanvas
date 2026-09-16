@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#191c20">
+  <meta name="description" content="A small, considered pixel-art studio. Draw, animate, and collaborate with your local coding agent.">
+  <title>SpriteCanvas - Pixel studio</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./review.css">
+  <link rel="stylesheet" href="./palette.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <svg class="icon-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="i-pencil" viewBox="0 0 24 24"><path d="m4 16 12-12 4 4L8 20H4zm10-10 4 4"/></symbol>
+      <symbol id="i-eraser" viewBox="0 0 24 24"><path d="m4 14 10-10 7 7-9 9H9zm5-5 7 7M12 20h9"/></symbol>
+      <symbol id="i-fill" viewBox="0 0 24 24"><path d="m4 11 8-8 8 8-8 8zm0 0h16M8 3l6 6M20 16s-4 5 0 5 0-5 0-5"/></symbol>
+      <symbol id="i-picker" viewBox="0 0 24 24"><path d="m13 5 6 6M3 21l2-6L17 3l4 4L9 19z"/></symbol>
+      <symbol id="i-line" viewBox="0 0 24 24"><path d="m5 19 14-14M3 17h4v4H3zM17 3h4v4h-4z"/></symbol>
+      <symbol id="i-rect" viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/></symbol>
+      <symbol id="i-ellipse" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7"/></symbol>
+      <symbol id="i-select" viewBox="0 0 24 24"><path stroke-dasharray="3 3" d="M4 4h16v16H4z"/></symbol>
+      <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M8 6l4-4 4 4M8 18l4 4 4-4M6 8l-4 4 4 4M18 8l4 4-4 4"/></symbol>
+      <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 12V6a2 2 0 0 1 4 0v5-7a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v7c0 5-3 8-7 8-3 0-5-2-7-5l-3-5a2 2 0 0 1 3-2l2 2"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="m9 5-5 5 5 5M4 10h10a6 6 0 0 1 0 12"/></symbol>
+      <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 5 5 5-5 5m5-5H10a6 6 0 0 0 0 12"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
+      <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 15v6h16v-6"/></symbol>
+      <symbol id="i-compare" viewBox="0 0 24 24"><path d="M10 4H3v16h7M14 4h7v16h-7M12 2v20"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><path d="M5 10h14v11H5zM8 10V6a4 4 0 0 1 8 0v4"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 14 8-14 8z"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><path d="M8 8h13v13H8zM16 8V3H3v13h5"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7M14 10v7"/></symbol>
+    </defs>
+  </svg>
+  <header class="app-header">
+    <a class="brand" href="./" aria-label="SpriteCanvas home"><img class="brand-mark" src="./assets/spritecanvas-logo.svg" width="64" height="64" alt=""><span>Sprite<span class="brand-light">Canvas</span><small>THE PIXEL STUDIO</small></span></a>
+    <div class="header-divider"></div>
+    <div class="document-info"><button id="project-name" title="Rename project">Loading studio...</button><span id="save-status" role="status">Opening workspace</span></div>
+    <nav class="document-actions" aria-label="Project actions">
+      <button data-action="new" title="New project">New</button>
+      <button data-action="open" title="Open project or import an image">Open</button>
+      <button data-action="save" title="Download editable project (Ctrl+S)">Save project</button>
+      <button class="primary" data-action="export"><svg><use href="#i-export"/></svg>Export<span class="button-arrow">&nearr;</span></button>
+    </nav>
+  </header>
+  <div id="conflict-banner" class="conflict-banner" hidden>
+    <span>Your browser has unsynced changes. The disk canvas also changed; neither version was overwritten.</span>
+    <button data-action="save">Download my version</button><button data-action="reload">Load disk version</button>
+  </div>
+  <main class="studio">
+    <aside class="tool-rail" aria-label="Drawing tools">
+      <div class="rail-label">TOOLS</div>
+      <div id="tools"></div>
+      <div class="rail-divider"></div>
+      <button class="icon-button" data-action="undo" title="Undo (Ctrl+Z)" aria-label="Undo"><svg><use href="#i-undo"/></svg></button>
+      <button class="icon-button" data-action="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo"><svg><use href="#i-redo"/></svg></button>
+      <div class="rail-spacer"></div>
+      <button class="help-button" data-action="help" title="Keyboard shortcuts and help" aria-label="Help">?</button>
+    </aside>
+    <section class="workbench" aria-label="Pixel workspace">
+      <div class="options-bar">
+        <span id="tool-name" class="tool-name">Pencil</span>
+        <label class="inline-label">Size <input id="brush-size" type="number" min="1" max="32" value="1" aria-label="Brush size"> px</label>
+        <label class="check-label"><input type="checkbox" id="filled-shape"> Fill shape</label>
+        <span class="option-separator"></span>
+        <button id="mirror-x" class="toggle-button" title="Mirror strokes left/right" aria-pressed="false">Sym X</button>
+        <button id="mirror-y" class="toggle-button" title="Mirror strokes top/bottom" aria-pressed="false">Sym Y</button>
+        <div class="options-spacer"></div>
+        <button id="grid-toggle" class="icon-button toggle-button" title="Pixel grid (G)" aria-label="Pixel grid" aria-pressed="false"><svg><use href="#i-grid"/></svg></button>
+        <button data-action="fit" title="Fit canvas (0)">Fit</button>
+        <button data-action="zoom-out" class="compact" aria-label="Zoom out">-</button><span id="zoom-label" class="mono">1000%</span><button data-action="zoom-in" class="compact" aria-label="Zoom in">+</button>
+      </div>
+      <div class="canvas-heading"><div><span class="file-dot"></span><span id="canvas-title">Untitled sprite</span><span id="canvas-size" class="subtle mono"></span></div><button id="compare-button" data-action="compare"><svg><use href="#i-compare"/></svg>Compare versions<span id="proposal-dot" hidden></span></button></div>
+      <div class="stage" id="stage">
+        <span class="stage-corner top-left"></span><span class="stage-corner bottom-right"></span>
+        <div class="stage-coordinate mono" id="stage-coordinate">PIXEL-PERFECT / NO ANTIALIASING</div>
+        <div class="canvas-wrap checkerboard" id="canvas-wrap">
+          <canvas id="art-canvas" aria-label="Artwork preview"></canvas>
+          <canvas id="overlay-canvas" aria-label="Drawing canvas" tabindex="0"></canvas>
+        </div>
+        <div class="stage-hint"><kbd>SPACE</kbd> drag to pan<span>&middot;</span>scroll to zoom<span>&middot;</span><kbd>ALT</kbd> pick color</div>
+      </div>
+      <div class="selection-bar"><span id="selection-info">No selection</span><button data-action="deselect">Deselect</button><button data-action="copy">Copy</button><button data-action="paste">Paste</button><span class="option-separator"></span><button data-action="flip-x">Flip H</button><button data-action="flip-y">Flip V</button><button data-action="rotate">Rotate 90&deg;</button><button data-action="resize" class="push-right">Canvas size</button></div>
+      <section class="timeline" aria-label="Animation timeline">
+        <div class="section-heading"><h2>Timeline <span id="frame-count" class="count">01</span></h2><div class="timeline-actions"><label class="check-label"><input id="onion-toggle" type="checkbox"> Onion skin</label><label class="inline-label"><input id="frame-duration" type="number" min="20" max="10000" value="120" step="10" aria-label="Frame duration"> ms</label><button id="play-button" data-action="play" title="Play / pause animation (Enter)"><svg><use href="#i-play"/></svg>Play</button></div></div>
+        <div class="frame-track"><div id="frames"></div><button class="add-frame" data-action="add-frame" title="Add blank frame" aria-label="Add blank frame"><svg><use href="#i-plus"/></svg></button></div>
+        <div class="timeline-footer"><span id="animation-info">1 frame &middot; 120 ms</span><div><button data-action="duplicate-frame"><svg><use href="#i-copy"/></svg>Duplicate</button><button data-action="frame-left" title="Move current frame earlier">Earlier</button><button data-action="frame-right" title="Move current frame later">Later</button><button data-action="delete-frame" class="icon-button" title="Delete current frame" aria-label="Delete frame"><svg><use href="#i-trash"/></svg></button></div></div>
+      </section>
+    </section>
+    <aside class="inspector" aria-label="Project panels">
+      <section class="preview-panel">
+        <div class="section-heading"><h2>Navigator</h2><span class="micro-label">LIVE PREVIEW</span></div>
+        <div class="navigator checkerboard"><canvas id="preview-canvas" aria-label="Navigator preview"></canvas></div>
+        <div class="preview-caption"><span id="preview-size">50 &times; 50</span><span>RGBA &middot; nearest neighbor</span></div>
+      </section>
+      <section class="palette-panel">
+        <div class="section-heading"><h2>Working palette <span id="palette-count" class="count"></span></h2><button data-action="add-color" title="Add foreground color to palette" aria-label="Add color"><svg><use href="#i-plus"/></svg></button></div>
+        <div class="color-controls"><div class="color-pair"><input type="color" id="foreground" value="#ffaf24" aria-label="Foreground color"><input type="color" id="background" value="#11131d" aria-label="Secondary color"></div><div class="hex-control"><label for="hex-color">FOREGROUND</label><input id="hex-color" value="#FFAF24" maxlength="9" spellcheck="false" aria-label="Hex color"></div><button data-action="swap-colors" title="Swap colors (X)" aria-label="Swap colors">&#8644;</button></div>
+        <div id="palette" class="swatches" aria-label="Color palette"></div>
+        <div class="panel-note">Editing swatches, not an image color limit.<br>Right-click to choose your secondary color.</div>
+      </section>
+      <section class="layers-panel">
+        <div class="section-heading"><h2>Layers <span id="layer-count" class="count"></span></h2><button data-action="add-layer" title="Add layer" aria-label="Add layer"><svg><use href="#i-plus"/></svg></button></div>
+        <div id="layers"></div>
+        <div class="layer-opacity"><label for="layer-opacity">Opacity</label><input id="layer-opacity" type="range" min="0" max="100" value="100"><output id="opacity-label">100%</output></div>
+        <div class="layer-actions"><button data-action="layer-up" title="Move layer up" aria-label="Move layer up">&uarr;</button><button data-action="layer-down" title="Move layer down" aria-label="Move layer down">&darr;</button><button data-action="duplicate-layer" title="Duplicate layer" aria-label="Duplicate layer"><svg><use href="#i-copy"/></svg></button><button data-action="merge-layer" title="Merge active layer down">Merge down</button><button data-action="delete-layer" title="Delete active layer" aria-label="Delete layer"><svg><use href="#i-trash"/></svg></button></div>
+      </section>
+      <section class="collaboration-panel">
+        <div class="section-heading"><h2><svg><use href="#i-spark"/></svg>Co-create</h2><span id="bridge-badge" class="badge">STATIC</span></div>
+        <p id="bridge-description">Share an editable snapshot with your agent. Review their work without losing yours.</p>
+        <div class="collab-flow"><span>YOUR CANVAS</span><span class="flow-line"></span><svg><use href="#i-spark"/></svg><span class="flow-line"></span><span>YOUR CALL</span></div>
+        <button class="wide accent-outline" data-action="handoff"><svg><use href="#i-export"/></svg>Prepare agent handoff</button>
+        <button class="wide" data-action="import-proposal">Import agent proposal</button>
+        <div class="proposal-card" id="proposal-card" hidden><span class="micro-label">READY TO REVIEW</span><strong id="proposal-title"></strong><button class="wide primary" data-action="compare">Review changes &rarr;</button></div>
+        <p class="local-note" id="local-note">No AI service is embedded. Your agent works through a local bridge or project files.</p>
+      </section>
+    </aside>
+  </main>
+  <footer class="status-bar"><span><i class="status-dot"></i><span id="connection-status">Browser workspace</span></span><span id="cursor-status" class="mono">X: -- &nbsp; Y: --</span><span id="active-layer-status">Ink</span><button data-action="reference">Open reference artwork <span>&nearr;</span></button><span class="footer-wordmark">MADE ONE PIXEL AT A TIME.</span></footer>
+  <div id="notice" class="notice" role="status" hidden></div>
+  <input type="file" id="open-file" accept=".json,.spritecanvas,.png,.jpg,.jpeg,.webp,.gif" hidden>
+  <input type="file" id="proposal-file" accept=".json,.spritecanvas" hidden>
+  <dialog id="new-dialog">
+    <form id="new-form"><div class="dialog-heading"><span class="eyebrow">A FRESH CANVAS</span><button type="button" data-close aria-label="Close">&times;</button></div><h2>Small pixels. Big possibilities.</h2><p>Your current project is autosaved, but starting a new one replaces the active workspace. Download it first if you want to keep a separate file.</p><label>Project name<input name="name" value="Untitled sprite" maxlength="120" required></label><div class="form-row"><label>Width<input name="width" type="number" min="1" max="256" value="32" required></label><label>Height<input name="height" type="number" min="1" max="256" value="32" required></label></div><div class="size-presets"><button type="button" data-size="16">16 &times; 16</button><button type="button" data-size="32">32 &times; 32</button><button type="button" data-size="64">64 &times; 64</button><button type="button" data-size="128">128 &times; 128</button></div><div class="dialog-footer"><button type="button" data-action="save">Download current project</button><button class="primary" type="submit">Create canvas</button></div></form>
+  </dialog>
+  <dialog id="text-dialog">
+    <form id="text-form"><div class="dialog-heading"><span class="eyebrow" id="text-eyebrow">PROJECT</span><button type="button" data-close aria-label="Close">&times;</button></div><h2 id="text-title">Rename project</h2><label id="text-input-label">Name<input id="text-input" maxlength="120" required></label><div class="dialog-footer"><button type="button" data-close>Cancel</button><button class="primary" type="submit">Save</button></div></form>
+  </dialog>
+  <dialog id="resize-dialog"><form id="resize-form"><div class="dialog-heading"><span class="eyebrow">CANVAS SIZE</span><button type="button" data-close aria-label="Close">&times;</button></div><h2>Make some room.</h2><p>This changes every frame and layer without scaling the pixels. Shrinking crops pixels; Undo restores them.</p><div class="form-row"><label>Width<input id="resize-width" type="number" min="1" max="256" required></label><label>Height<input id="resize-height" type="number" min="1" max="256" required></label></div><label class="check-label"><input id="resize-center" type="checkbox" checked> Anchor artwork at center</label><div class="dialog-footer"><button type="button" data-close>Cancel</button><button class="primary" type="submit">Resize canvas</button></div></form></dialog>
+  <dialog id="image-dialog"><form id="image-form"><div class="dialog-heading"><span class="eyebrow">IMPORT IMAGE</span><button type="button" data-close aria-label="Close">&times;</button></div><h2>Bring your pixels along.</h2><p id="image-description"></p><label>Import as<select id="image-mode"><option value="layer">New layer, fit to current canvas</option><option value="project">New project, choose dimensions</option></select></label><div class="form-row"><label>Width<input id="image-width" type="number" min="1" max="256" required></label><label>Height<input id="image-height" type="number" min="1" max="256" required></label></div><p class="panel-note">Resampling uses nearest neighbor. Animated images import their first frame only.</p><div class="dialog-footer"><button type="button" data-close>Cancel</button><button class="primary" type="submit">Import image</button></div></form></dialog>
+  <dialog id="export-dialog"><form id="export-form"><div class="dialog-heading"><span class="eyebrow">OUT INTO THE WORLD</span><button type="button" data-close aria-label="Close">&times;</button></div><h2>Export your creation.</h2><label>Format<select id="export-format"><option value="png">PNG - current frame, transparent</option><option value="sheet">PNG sprite sheet + JSON metadata</option><option value="gif">Animated GIF - looping</option><option value="svg">SVG - crisp pixel rectangles</option><option value="project">SpriteCanvas - editable project</option></select></label><div class="form-row"><label>Pixel scale<select id="export-scale"><option value="1">1x - original size</option><option value="2">2x</option><option value="4">4x</option><option value="8" selected>8x</option><option value="16">16x</option></select></label><label>Sheet columns<input id="sheet-columns" type="number" min="1" max="64" value="8"></label></div><p class="panel-note">PNG and project files keep alpha. GIF shares an adaptive palette of up to 255 opaque colors across all frames, separate from the editing swatches, with no dithering. Alpha below 50% is transparent; remaining partial alpha is matted against white. Timing uses 10 ms steps. Only visible layers are rendered.</p><div class="dialog-footer"><button type="button" data-close>Cancel</button><button class="primary" type="submit"><svg><use href="#i-export"/></svg>Download</button></div></form></dialog>
+  <dialog id="compare-dialog" class="compare-dialog">
+    <div class="dialog-heading"><span class="eyebrow">HUMAN + AGENT / ALWAYS YOUR CALL</span><button data-close aria-label="Close">&times;</button></div>
+    <div class="compare-title-row"><h2 id="compare-title">Two versions. One vision.</h2><span class="badge" id="compare-badge">PROPOSAL</span></div>
+    <p id="compare-description"></p>
+    <div class="compare-controls"><div class="segmented"><button data-compare-mode="side" class="active">Side by side</button><button data-compare-mode="wipe">Wipe</button><button data-compare-mode="diff">Pixel difference</button></div><label>Frame <select id="compare-frame" aria-label="Comparison frame"></select></label></div>
+    <div id="compare-images" class="compare-images"><figure id="before-figure"><figcaption><span class="version-marker"></span>Your saved canvas <span id="before-dimensions"></span></figcaption><div class="compare-image checkerboard"><canvas id="before-canvas"></canvas></div></figure><figure><figcaption><span class="version-marker agent"></span><span id="after-label">Agent proposal</span><span id="after-dimensions"></span></figcaption><div class="compare-image checkerboard"><canvas id="after-canvas"></canvas></div></figure></div>
+    <label id="wipe-control" class="wipe-control" hidden>Your version <input id="wipe-slider" type="range" min="0" max="100" value="50"> Agent version</label>
+    <div class="comparison-stats"><span id="diff-count"></span><span id="structure-changes"></span></div>
+    <section id="palette-comparison" class="palette-comparison" aria-label="Palette changes" hidden>
+      <div><h3>Your working palette <span id="before-palette-count" class="count"></span></h3><div id="before-palette" class="swatches" aria-label="Original palette colors"></div></div>
+      <div><h3>Proposed working palette <span id="after-palette-count" class="count"></span></h3><div id="after-palette" class="swatches" aria-label="Proposed palette colors"></div></div>
+    </section>
+    <section id="review-history" class="review-history" aria-label="Review feedback" hidden></section>
+    <form id="feedback-form" class="feedback-form" hidden>
+      <div class="section-heading"><h3>What should change?</h3><button type="button" data-action="cancel-feedback">Cancel</button></div>
+      <label for="feedback-message">Instructions for the next version</label>
+      <textarea id="feedback-message" maxlength="4000" rows="3" required placeholder="For example: Remove all scribbles. Use a clean green background and ivory frame, then recreate the helmet character from my reference."></textarea>
+      <div class="feedback-attachment-row">
+        <label class="attachment-picker">Attach reference (optional)<input type="file" id="feedback-reference" accept="image/png,image/jpeg,image/webp"></label>
+        <span class="panel-note">PNG, JPEG or WebP, up to 2 MB. Kept with this private review.</span>
+      </div>
+      <div id="feedback-reference-preview" class="reference-preview" hidden><img id="feedback-reference-image" alt="Reference for the requested changes"><span id="feedback-reference-name"></span><button type="button" data-action="remove-reference">Remove</button></div>
+      <p id="feedback-delivery-note" class="feedback-delivery-note"></p>
+      <div class="feedback-submit-row"><span>Your canvas and this proposal stay unchanged.</span><button type="submit" id="submit-feedback" class="primary">Save feedback for agent</button></div>
+    </form>
+    <div class="dialog-footer review-footer"><button id="reject-button" data-action="reject">Dismiss proposal</button><button id="request-changes-button" class="accent-outline" data-action="request-changes">Request changes</button><span id="compare-safety">Your original is preserved in this comparison.</span><button id="latest-proposal-button" data-action="compare" hidden>Show latest proposal</button><button id="accept-button" class="primary" data-action="accept">Accept agent version</button></div>
+  </dialog>
+  <dialog id="handoff-dialog">
+    <div class="dialog-heading"><span class="eyebrow">A SHARED CANVAS, NOT A BLACK BOX</span><button data-close aria-label="Close">&times;</button></div><h2>Ready for your agent.</h2><p id="handoff-description"></p><pre id="handoff-command"></pre><p>Tell your agent what to add or change. It should submit a <strong>proposal</strong>, never replace your canvas directly. Use <strong>Compare versions</strong> to review, then accept or dismiss.</p><div class="dialog-footer"><button data-close>Done</button><button data-action="download-handoff" class="primary">Download handoff JSON</button></div>
+  </dialog>
+  <dialog id="help-dialog" class="help-dialog"><div class="dialog-heading"><span class="eyebrow">A LITTLE FIELD GUIDE</span><button data-close aria-label="Close">&times;</button></div><h2>Everything starts with a pixel.</h2><div class="help-grid"><section><h3>Make your mark</h3><dl><dt>Pencil / Eraser</dt><dd>B / E</dd><dt>Fill / Eyedropper</dt><dd>F / I</dd><dt>Line / Rectangle / Ellipse</dt><dd>L / U / O</dd><dt>Select / Move / Hand</dt><dd>M / V / H</dd><dt>Brush size</dt><dd>[ / ]</dd><dt>Swap foreground / secondary</dt><dd>X</dd><dt>Pick from artwork</dt><dd>Alt + click</dd><dt>Secondary color</dt><dd>Right-click</dd></dl></section><section><h3>Stay in flow</h3><dl><dt>Undo / Redo</dt><dd>Ctrl+Z / Ctrl+Shift+Z</dd><dt>Copy / Cut / Paste</dt><dd>Ctrl+C / X / V</dd><dt>Select all / Deselect</dt><dd>Ctrl+A / Ctrl+D</dd><dt>Delete selection or cel</dt><dd>Delete</dd><dt>Nudge selection / cel</dt><dd>Arrow keys</dd><dt>Pan / Fit / Grid</dt><dd>Space+drag / 0 / G</dd><dt>Play animation</dt><dd>Enter</dd><dt>Download project</dt><dd>Ctrl+S</dd></dl></section></div><p>Selections constrain drawing, fills, and transformations on the active cel. Double-click a layer name to rename it. Layers are shared across frames; their pixels are independent. Layer lock prevents pixel edits and deletion.</p><p><strong>Local collaboration:</strong> run <code>npm start</code>. The agent reads and proposes through the loopback bridge; you approve changes. GitHub Pages stays fully static, with browser autosave and JSON handoff/import instead. No account, cloud storage, telemetry, or embedded AI model.</p><p class="panel-note">Inspired by familiar <a href="https://www.aseprite.org/docs/" target="_blank" rel="noreferrer">Aseprite workflows</a>, not an Aseprite clone or .aseprite file reader. Ctrl shortcuts also support Command on macOS.</p></dialog>
+</body>
+</html>
