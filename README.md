@@ -12,6 +12,8 @@ The scout above is the application's own editable character logo, not a screensh
 
 **Figure 1 - The actual studio.** Tools live on the left, native-pixel artwork in the middle, layers/palette/navigator on the right, and animation frames below. This image uses the bundled helmet reconstruction plus a generated twinkle study. It is a reproducible documentation fixture, **not the user's private saved workspace**.
 
+The interface uses **Solarized Dark**: deep blue-green surfaces, warm neutral text and cyan controls. The theme covers the editor, dialogs and review feedback; it does not recolor your pixels, editing swatches, exports or mascot. Transparency checkerboards stay neutral. See the [theme guide](docs/book/01-using-studio/README.md#solarized-dark-interface) for the palette and implementation boundary.
+
 **Start here:** [Run locally](#run-locally) to draw, [collaborate safely](#collaborate-with-this-agent) to work with an agent, or open the [illustrated technical handbook](docs/README.md) to learn the implementation.
 
 ## Contents

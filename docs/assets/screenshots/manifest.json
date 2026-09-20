@@ -8,11 +8,11 @@
   "sourceHashes": {
     "web/examples/helmet.spritecanvas.json": "34bd50943ec0d55c6f69e37b3c599572e92fb1b49acc37d4f3e00d3ed53d5460",
     "web/assets/spritecanvas-logo.spritecanvas.json": "897576262dd830072799be42e17524f6403bbcbbc2e632c52624d55cd3a1daed",
-    "web/index.html": "ef6280bbf575d3579b5ebd798a306f3dc437f2ce43c0e48ad67638012c8f45c0",
-    "web/app.js": "cad8f42f513478734776d1c423b6ae23c3ea93ac758de1ef6c7523d649416029",
-    "web/styles.css": "e8acc986d07e5c7deb048de86993b07f39ebaeb74248c957efeb3297abf117fb",
+    "web/index.html": "f73ff57aec2651a3f609a4ca9c9598c7ef0dc41f47cf3bf8e8e517ba7d4ef06b",
+    "web/app.js": "5e1b9c88442b0c8affb3d1414d41a95073b79591b1056f6771c66f17dd09d39e",
+    "web/styles.css": "2499ebf57f7ac88171679e7c9aa59fd39e4c45f9f37a887aa66d7ae39946e606",
     "web/palette.css": "c682f303549ebf71dcb9e32fbdcb434614a38db4a49fd891e97a1d90c53e3cd8",
-    "web/review.css": "2999368983ea7ca82ec698b01b9457c15d8b478aa6d0325ad260ea7e40aeee2a",
+    "web/review.css": "9d62bee75bfb851e614b5c2b7e7d6c2ded876334bef9c2e7d5783b382a25407b",
     "web/lib/model.js": "4f45fe7e21992bb3a0a6b0d635f76160bb4b6d87ee1d683a5fc02d65687df321",
     "web/lib/export.js": "2d259b2e2a9c3659bbee699fc2d790c18c894d4241db227236f39bcffbd155ff",
     "web/lib/gif.js": "8e46e72d68093c06df21ca722c89bf5c7585ae399c0350f1d4e6f110bc49a3e7",
@@ -35,56 +35,56 @@
       "caption": "The real studio with the bundled helmet reconstruction and a generated four-frame twinkle study. This is documentation sample artwork, not the private workspace.",
       "width": 1440,
       "height": 1050,
-      "sha256": "40a50a9ba3025220a7ef0ce3f8b47b3bff0b9a986a23a02b80bb04c379db8006"
+      "sha256": "7d4e430222090bac1c8d2f343f9c4f485357330ecf8e100be663cda9968f7d32"
     },
     {
       "file": "selection-workflow.png",
       "caption": "A marquee bounds work on the active cel; the selection does not flatten or combine the layers.",
       "width": 1440,
       "height": 1050,
-      "sha256": "9940688dcebee8d56f3551016a8d91df97293af78e8a144a8384ed26126b2648"
+      "sha256": "11146a2b1d71adb42378a17698a91067bf2683f26d87a80d2af2b57dee6dc9b7"
     },
     {
       "file": "export-options.png",
       "caption": "The actual export dialog, configured for a looping GIF at 16x. Its notes explain palette, transparency and timing tradeoffs.",
       "width": 520,
       "height": 466,
-      "sha256": "0d6d7a9c98ee1f0a023dcca5e42cbb26d4402d645b9b48685c7cfed49613c33b"
+      "sha256": "7edd4e81c47d16047421800d9a862b68c0c4a172f5994b92e38ea73996ecfa28"
     },
     {
       "file": "compare-versions.png",
       "caption": "Side-by-side proposal review in the actual UI. Both versions are generated documentation fixtures; the baseline remains unchanged.",
       "width": 1040,
       "height": 766,
-      "sha256": "e146891c2ed2479ed9e6052260298d682ff8e26afe8e4b2fb3bf4cd7e20b57fd"
+      "sha256": "ffe6f62272aab6ab459edf75f9464ddd3640ee07fdf946afeee1b2af0bb1da5d"
     },
     {
       "file": "pixel-difference.png",
       "caption": "Pixel difference isolates the proposed sparkle changes. Structural changes are listed separately below the images.",
       "width": 1040,
       "height": 766,
-      "sha256": "ca1020d3292aa6162e4499ab859be569598cd927f973034b7b21c7fd71b14e3f"
+      "sha256": "5e4a6a8f090e3ff812f09d52ab8f14dac0a41e4305bcdefc4f10bc0b957798d3"
     },
     {
       "file": "request-changes.png",
       "caption": "A sample feedback draft with a bundled logo reference. Saving a request records guidance; it does not automatically message the agent.",
       "width": 1040,
       "height": 1046,
-      "sha256": "3814473386a94be0130fe0b9c915b0c2f79d7641140e323904ab1cadfafc39cd"
+      "sha256": "9812106f99229ecae3b998e7fd196ee56fde5c846857f6590fccaffb6d794ff2"
     },
     {
       "file": "studio-mobile.png",
       "caption": "The same studio at a 390px viewport. The workspace reorganizes vertically; screenshots do not imply touch-device certification.",
       "width": 390,
       "height": 844,
-      "sha256": "26234d7d97f8af38cf68405d65097ef3035e259dba3259de2c6f71b03e188872"
+      "sha256": "23b1da0bbea18150bdfee6865ccfe6261089c7b812ccf5256f1202764c9a1573"
     },
     {
       "file": "editable-logo.png",
       "caption": "The original camera-facing GIF pose opened as six editable layers, including the warm lens flare. The favicon alone omits the flare.",
       "width": 1440,
       "height": 1050,
-      "sha256": "91064efe47437fa302ecef409ee335fe896d95306fa14a2c5f7cff5884cddaa5"
+      "sha256": "0ff8780a55f0689b085b2ecaa2a21cc0a482ec1d92521b117faf2fe51ff6ba12"
     }
   ]
 }

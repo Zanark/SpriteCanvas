@@ -1,18 +1,18 @@
-.feedback-form{margin-top:18px;padding:15px 18px;border:1px solid #576446;border-radius:7px;background:#272f25}
+.feedback-form{margin-top:18px;padding:15px 18px;border:1px solid var(--accent);border-radius:7px;background:var(--panel)}
 .feedback-form h3{color:var(--accent);font-size:13px}
 .feedback-form .section-heading{min-height:26px;margin-bottom:9px}
 .feedback-form label{display:block!important;margin:8px 0!important;font-size:11px;color:var(--muted)}
-.feedback-form textarea{display:block;width:100%;resize:vertical;min-height:82px;max-height:240px;font:12px/1.6 "Segoe UI",system-ui,sans-serif;border:1px solid #5a6551;border-radius:5px;background:#191f1b;color:var(--text);padding:10px 12px}
+.feedback-form textarea{display:block;width:100%;resize:vertical;min-height:82px;max-height:240px;font:12px/1.6 "Segoe UI",system-ui,sans-serif;border:1px solid var(--control-border);border-radius:5px;background:var(--bg);color:var(--text);padding:10px 12px}
 .feedback-form textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .feedback-attachment-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .feedback-attachment-row .attachment-picker input{display:block!important;width:auto!important;max-width:100%;padding:7px!important;margin-top:7px;font-size:10px}
 .feedback-submit-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
 .feedback-submit-row>span{font-size:10px;color:var(--muted)}
-.feedback-form .feedback-delivery-note{font-size:11px;color:#b4c5a7;margin:12px 0 5px}
+.feedback-form .feedback-delivery-note{font-size:11px;color:var(--muted);margin:12px 0 5px}
 .reference-preview{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:11px;overflow-wrap:anywhere}
 .reference-preview img{max-width:100px;max-height:100px;object-fit:contain;border:1px solid var(--border);border-radius:4px}
 .review-history{margin-top:16px;max-height:220px;overflow:auto;scrollbar-width:thin}
-.review-entry{padding:11px 14px;margin-top:8px;border:1px solid #4a5841;border-radius:5px;background:#283124}
+.review-entry{padding:11px 14px;margin-top:8px;border:1px solid var(--control-border);border-radius:5px;background:var(--bg)}
 .review-entry summary{cursor:pointer;font-size:11px;color:var(--accent)}
 .review-entry p{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text);font-size:12px;margin:10px 0}
 .review-entry small{display:block;font-size:10px;color:var(--muted);line-height:1.6}

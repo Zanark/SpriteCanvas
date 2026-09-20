@@ -27,7 +27,7 @@ let textCallback = null, importedImage = null, storageAvailable = true;
 let feedback = [], feedbackReference = null, feedbackProposalId = null, feedbackRenderKey = '';
 let reviewBusy = false, referenceLoading = false, reviewEpoch = 0, referenceRead = 0;
 const overlay = $('#overlay-canvas'), artCanvas = $('#art-canvas'), stage = $('#stage');
-
+const themeColor = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 function notify(message, error = false) {
   clearTimeout(noticeTimer);
   const notice = $('#notice');
@@ -302,26 +302,26 @@ function renderOverlay() {
   const ctx = overlay.getContext('2d');
   ctx.clearRect(0, 0, overlay.width, overlay.height);
   if (grid && zoom >= 5) {
-    ctx.beginPath(); ctx.strokeStyle = '#00000030'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.strokeStyle = themeColor('--grid'); ctx.lineWidth = 1;
     for (let x = 0; x <= project.width; x++) { ctx.moveTo(x * zoom + 0.5, 0); ctx.lineTo(x * zoom + 0.5, overlay.height); }
     for (let y = 0; y <= project.height; y++) { ctx.moveTo(0, y * zoom + 0.5); ctx.lineTo(overlay.width, y * zoom + 0.5); }
     ctx.stroke();
   }
   if (mirrorX || mirrorY) {
-    ctx.strokeStyle = '#BDF07888'; ctx.setLineDash([4, 4]); ctx.beginPath();
+    ctx.strokeStyle = themeColor('--guide'); ctx.setLineDash([4, 4]); ctx.beginPath();
     if (mirrorX) { ctx.moveTo(overlay.width / 2, 0); ctx.lineTo(overlay.width / 2, overlay.height); }
     if (mirrorY) { ctx.moveTo(0, overlay.height / 2); ctx.lineTo(overlay.width, overlay.height / 2); }
     ctx.stroke(); ctx.setLineDash([]);
   }
   if (selection) {
     const { x, y, w, h } = selection;
-    ctx.strokeStyle = '#11131D'; ctx.lineWidth = 2; ctx.strokeRect(x * zoom + 1, y * zoom + 1, w * zoom - 2, h * zoom - 2);
-    ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = themeColor('--selection-dark'); ctx.lineWidth = 2; ctx.strokeRect(x * zoom + 1, y * zoom + 1, w * zoom - 2, h * zoom - 2);
+    ctx.strokeStyle = themeColor('--selection-light'); ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
     ctx.strokeRect(x * zoom + 0.5, y * zoom + 0.5, w * zoom - 1, h * zoom - 1); ctx.setLineDash([]);
   }
   if (hover && !drag && ['pencil', 'eraser'].includes(tool)) {
     const size = brushSize(), offset = Math.floor(size / 2);
-    ctx.strokeStyle = '#FFFFFFAA'; ctx.lineWidth = 1;
+    ctx.strokeStyle = themeColor('--cursor'); ctx.lineWidth = 1;
     ctx.strokeRect((hover.x - offset) * zoom + 0.5, (hover.y - offset) * zoom + 0.5, size * zoom - 1, size * zoom - 1);
   }
 }
@@ -679,7 +679,7 @@ function renderCompare() {
     const split = Math.round(canvas.width * Number($('#wipe-slider').value) / 100);
     context.save(); context.beginPath(); context.rect(0, 0, split, canvas.height); context.clip();
     context.clearRect(0, 0, canvas.width, canvas.height); context.drawImage(projectCanvas(before, beforeIndex), 0, 0); context.restore();
-    context.fillStyle = '#BDF078'; context.fillRect(split, 0, 1, canvas.height);
+    context.fillStyle = themeColor('--accent'); context.fillRect(split, 0, 1, canvas.height);
   } else renderPixels(canvas, composite(after, afterIndex), after.width, after.height);
   $('#before-figure').hidden = compareMode !== 'side';
   $('#compare-images').classList.toggle('single', compareMode !== 'side');

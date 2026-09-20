@@ -28,6 +28,22 @@ The [edit guards](../../../web/app.js#L40-L75) and [pointer handlers](../../../w
 
 **Figure 1 - Four areas, one active cel.** This real screenshot uses public sample artwork and a generated four-frame study. It is not a rendering of private work.
 
+### Solarized Dark interface
+
+The studio uses [Ethan Schoonover's Solarized palette](https://ethanschoonover.com/solarized/) for its interface. The theme is the same in local and static modes, including narrow layouts, modal dialogs, proposal review and feedback history. It is an interface setting, not an artwork filter or a new working palette.
+
+| Role | Solarized color | Where to see it |
+| --- | --- | --- |
+| Main background and input wells | Base03 `#002B36` | Stage edges, inputs, selected frames and dialogs |
+| Raised surfaces | Base02 `#073642` | Header, tool rail, inspector and timeline |
+| Text and supporting labels | Base1 `#93A1A1` | Controls and explanatory text |
+| Primary actions and focus | Cyan `#2AA198` | Export, selected-tool outlines, focus rings and wipe divider |
+| Warnings and errors | Yellow `#B58900` / red `#DC322F` | Conflict borders and error indicators, with readable neutral text |
+
+For example, enabling symmetry adds a cyan guide above the art. It does not turn a gold pixel cyan, rewrite a saved cel, or add the guide to a PNG. The main transparency checkerboard and neutral thumbnail/review wells stay separate from the theme so the surroundings do not acquire a strong blue-green cast. The green pixel-difference visualization keeps its existing diagnostic meaning.
+
+The [CSS tokens](../../../web/styles.css#L1-L15) are the source of interface colors; [review styles](../../../web/review.css#L1-L23) reuse them. [Canvas overlays](../../../web/app.js#L301-L327) and the [wipe divider](../../../web/app.js#L666-L683) read those same tokens. Artwork colors, the bundled samples and branding remain unchanged. Screenshots in this book are recaptured through the isolated public-sample workflow, never from a user's live workspace.
+
 ### Header and document actions
 
 The header contains the tool logo, project name, save state and New/Open/Save project/Export actions.
