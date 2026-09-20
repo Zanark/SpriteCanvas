@@ -12,13 +12,14 @@ The scout above is the application's own editable character logo, not a screensh
 
 **Figure 1 - The actual studio.** Tools live on the left, native-pixel artwork in the middle, layers/palette/navigator on the right, and animation frames below. This image uses the bundled helmet reconstruction plus a generated twinkle study. It is a reproducible documentation fixture, **not the user's private saved workspace**.
 
-The interface uses **a customized Solarized Dark theme**: dark `#001E26` headers and panels, a **pure-black canvas surround**, warm neutral text and cyan controls. The surround has no gradient or dot texture. The theme covers the editor, dialogs and review feedback; it does not recolor your pixels, editing swatches, exports or mascot. Transparency checkerboards stay neutral. See the [theme guide](docs/book/01-using-studio/README.md#solarized-dark-interface) for the palette and implementation boundary.
+The interface uses **DeepSeaFoam**, our Solarized-derived theme: dark `#001E26` headers and panels, a **pure-black canvas surround**, warm neutral text and cyan controls. The surround has no gradient or dot texture. The theme covers the editor, dialogs and review feedback; it does not recolor your pixels, editing swatches, exports or mascot. Transparency checkerboards stay neutral. See the [DeepSeaFoam theme guide](docs/book/01-using-studio/README.md#deepseafoam-interface) for the complete active palette and implementation boundary.
 
 **Start here:** [Run locally](#run-locally) to draw, [collaborate safely](#collaborate-with-this-agent) to work with an agent, or open the [illustrated technical handbook](docs/README.md) to learn the implementation.
 
 ## Contents
 
 - [What makes SpriteCanvas different](#what-makes-spritecanvas-different)
+- [DeepSeaFoam theme](#deepseafoam-theme)
 - [Run locally](#run-locally)
 - [Your first sprite and animation](#your-first-sprite-and-animation)
 - [What you can draw with](#what-you-can-draw-with)
@@ -66,6 +67,30 @@ Four concepts make the rest of the UI easier to understand:
 | **Cel** | One layer's pixels in one frame; drawing affects the active cel |
 | **Working palette** | Convenient editing swatches, not a restriction on RGBA artwork colors |
 | **Proposal** | A candidate plus the complete original baseline, awaiting human review |
+
+## DeepSeaFoam theme
+
+**DeepSeaFoam** is the studio's custom Solarized-derived interface theme. Headers and panels use deep blue-green, while the canvas surround is solid black with no gradient or dots. These are the active interface colors, not the project's editable working palette:
+
+| Use | Color |
+| --- | --- |
+| Canvas surround and recessed surfaces | `#000000` |
+| Header, toolbars and panels | `#001E26` |
+| Buttons, accents and focus rings | `#2AA198` |
+| Main text and primary-button hover | `#93A1A1` |
+| Secondary text and baseline marker | `#839496` |
+| Warm emphasis and notices | `#EEE8D5` |
+| Selection highlights | `#FDF6E3` |
+| Borders | `#586E75` |
+| Document indicator | `#859900` |
+| Warning indicators | `#B58900` |
+| Error indicators | `#DC322F` |
+
+**Neutral preview colors:** the transparency checkerboard uses `#D0D1C9` / `#B2B5AE`; navigator `#292E33` / `#30363B`; comparison previews `#30373A` / `#394143`; frame thumbnails `#343B40`; layer thumbnails `#191D22`.
+
+**Transparent overlays:** separators `#586E7566`, hover fills `#586E7533`, shadows `#00000066` / `#000000CC`, modal backdrop `#000000B8`, pixel grid `#002B3630`, symmetry guide `#2AA19888`, and brush cursor `#FDF6E3AA`. These use `#RRGGBBAA`: the last two digits specify alpha.
+
+The theme never recolors artwork, exports, editing swatches or the mascot. [CSS tokens](web/styles.css#L1-L15) define the interface palette; the [handbook](docs/book/01-using-studio/README.md#deepseafoam-interface) explains the rendering boundary and credits the original Solarized palette.
 
 ## Run locally
 
