@@ -12,7 +12,7 @@ const save = async page => {
 const canvasPixels = locator => locator.evaluate(canvas => [...canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data]);
 
 for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
-  test(`Solarized Dark covers studio and review UI without recoloring artwork at ${viewport.width}px`, async ({ page }, testInfo) => {
+  test(`DeepSeaFoam covers studio and review UI without recoloring artwork at ${viewport.width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize(viewport);
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));

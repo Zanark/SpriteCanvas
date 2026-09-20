@@ -28,17 +28,29 @@ The [edit guards](../../../web/app.js#L40-L75) and [pointer handlers](../../../w
 
 **Figure 1 - Four areas, one active cel.** This real screenshot uses public sample artwork and a generated four-frame study. It is not a rendering of private work.
 
-### Solarized Dark interface
+### DeepSeaFoam interface
 
-The studio uses [Ethan Schoonover's Solarized palette](https://ethanschoonover.com/solarized/) with customized darker surfaces: headers and panels are `#001E26`, and the canvas surround is pure black `#000000`, without a gradient or dot texture. Text and accent colors retain their Solarized values. The theme is the same in local and static modes, including narrow layouts, modal dialogs, proposal review and feedback history. It is an interface setting, not an artwork filter or a new working palette.
+**DeepSeaFoam** is SpriteCanvas's custom theme, derived from [Ethan Schoonover's Solarized palette](https://ethanschoonover.com/solarized/). Headers and panels are `#001E26`, and the canvas surround is pure black `#000000`, without a gradient or dot texture. Text and accent colors retain their Solarized values. The theme is the same in local and static modes, including narrow layouts, modal dialogs, proposal review and feedback history. It is an interface setting, not an artwork filter or a new working palette.
 
-| Role | Solarized color | Where to see it |
+These are the colors actually used by the interface, not every unused Solarized token retained in the stylesheet:
+
+| Role | Color | Where to see it |
 | --- | --- | --- |
-| Canvas surround and recessed surfaces | Pure black `#000000` | Stage, inputs, selected frames and dialogs |
-| Raised surfaces | Darkened Solarized `#001E26` | Header, tool rail, inspector and timeline |
-| Text and supporting labels | Base1 `#93A1A1` | Controls and explanatory text |
-| Primary actions and focus | Cyan `#2AA198` | Export, selected-tool outlines, focus rings and wipe divider |
-| Warnings and errors | Yellow `#B58900` / red `#DC322F` | Conflict borders and error indicators, with readable neutral text |
+| Canvas surround and recessed surfaces | `#000000` | Stage, inputs, selected frames and dialogs |
+| Raised surfaces | `#001E26` | Header, tool rail, inspector and timeline |
+| Primary actions and focus | `#2AA198` | Export, selected-tool outlines, focus rings and wipe divider |
+| Text and supporting labels | `#93A1A1` | Controls, explanatory text and primary-button hover |
+| Faint labels and version marker | `#839496` | Micro-labels, hints and the baseline marker |
+| Warm emphasis | `#EEE8D5` | Brand-light text and notice/error text |
+| Selection highlight | `#FDF6E3` | Light marching-ants outline and brush cursor |
+| Borders | `#586E75` | Input borders, separators and stage-corner marks |
+| Document indicator | `#859900` | The small dot beside the canvas title |
+| Warning indicator | `#B58900` | Conflict borders |
+| Error indicator | `#DC322F` | Error borders and save-status underline |
+
+Transparency overlays use eight-digit `#RRGGBBAA` colors: separators `#586E7566`, hover fills `#586E7533`, shadows `#00000066` / `#000000CC`, modal backdrop `#000000B8`, pixel grid `#002B3630`, symmetry guide `#2AA19888` and brush cursor `#FDF6E3AA`. The final two digits are alpha, not a separate RGB shade.
+
+Preview-only neutrals are kept separate: the main checkerboard uses `#D0D1C9` / `#B2B5AE`, navigator `#292E33` / `#30363B`, review checkerboard `#30373A` / `#394143`, frame thumbnails `#343B40`, and layer thumbnails `#191D22`.
 
 For example, enabling symmetry adds a cyan guide above the art. It does not turn a gold pixel cyan, rewrite a saved cel, or add the guide to a PNG. The main transparency checkerboard and neutral thumbnail/review wells stay separate from the theme so the surroundings do not acquire a strong blue-green cast. The green pixel-difference visualization keeps its existing diagnostic meaning.
 
