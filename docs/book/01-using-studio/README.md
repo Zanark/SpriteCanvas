@@ -30,11 +30,11 @@ The [edit guards](../../../web/app.js#L40-L75) and [pointer handlers](../../../w
 
 ### Solarized Dark interface
 
-The studio uses [Ethan Schoonover's Solarized palette](https://ethanschoonover.com/solarized/) for its interface. The theme is the same in local and static modes, including narrow layouts, modal dialogs, proposal review and feedback history. It is an interface setting, not an artwork filter or a new working palette.
+The studio uses [Ethan Schoonover's Solarized palette](https://ethanschoonover.com/solarized/) with a custom darker base: `#001E26` instead of the standard Base03 `#002B36`. Raised panels, text and accent colors retain their Solarized values. The theme is the same in local and static modes, including narrow layouts, modal dialogs, proposal review and feedback history. It is an interface setting, not an artwork filter or a new working palette.
 
 | Role | Solarized color | Where to see it |
 | --- | --- | --- |
-| Main background and input wells | Base03 `#002B36` | Stage edges, inputs, selected frames and dialogs |
+| Main background and input wells | Darkened Base03 `#001E26` | Stage edges, inputs, selected frames and dialogs |
 | Raised surfaces | Base02 `#073642` | Header, tool rail, inspector and timeline |
 | Text and supporting labels | Base1 `#93A1A1` | Controls and explanatory text |
 | Primary actions and focus | Cyan `#2AA198` | Export, selected-tool outlines, focus rings and wipe divider |

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { applyOperations, composite, createProject, sameProject } from '../../web/lib/model.js';
 
 const site = 'http://127.0.0.1:4274/SpriteCanvas/';
-const bg = 'rgb(0, 43, 54)', panel = 'rgb(7, 54, 66)', text = 'rgb(147, 161, 161)', cyan = 'rgb(42, 161, 152)';
+const bg = 'rgb(0, 30, 38)', panel = 'rgb(7, 54, 66)', text = 'rgb(147, 161, 161)', cyan = 'rgb(42, 161, 152)';
 const save = async page => {
   const pending = page.waitForEvent('download');
   await page.locator('.document-actions [data-action="save"]').click();
@@ -18,7 +18,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(site);
     await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
-    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#002b36');
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#001e26');
     await expect(page.locator('body')).toHaveCSS('background-color', bg);
     await expect(page.locator('body')).toHaveCSS('color', text);
     for (const selector of ['.app-header', '.tool-rail', '.options-bar', '.timeline', '.inspector']) {
