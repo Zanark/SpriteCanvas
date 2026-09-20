@@ -30,8 +30,11 @@ test('published site is the editor, with working offline drawing, persistence an
   await page.goto(baseURL);
   await expect(page).toHaveTitle('SpriteCanvas - Pixel studio');
   await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 30, 38)');
-  await expect(page.locator('.app-header')).toHaveCSS('background-color', 'rgb(7, 54, 66)');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.app-header')).toHaveCSS('background-color', 'rgb(0, 30, 38)');
+  await expect(page.locator('#stage')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  await expect(page.locator('#stage')).toHaveCSS('background-image', 'none');
+  expect(await page.locator('#stage').evaluate(stage => getComputedStyle(stage, '::before').content)).toBe('none');
   await expect(page.locator('.document-actions .primary')).toHaveCSS('background-color', 'rgb(42, 161, 152)');
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#001e26');
   await expect(page.locator('#bridge-badge')).toHaveText('STATIC');
