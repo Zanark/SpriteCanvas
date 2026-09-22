@@ -72,23 +72,47 @@ Four concepts make the rest of the UI easier to understand:
 
 **DeepSeaFoam** is the studio's custom Solarized-derived interface theme. Headers and panels use deep blue-green, while the canvas surround is solid black with no gradient or dots. These are the active interface colors, not the project's editable working palette:
 
-| Use | Color |
-| --- | --- |
-| Canvas surround and recessed surfaces | `#000000` |
-| Header, toolbars and panels | `#001E26` |
-| Buttons, accents and focus rings | `#2AA198` |
-| Main text and primary-button hover | `#93A1A1` |
-| Secondary text and baseline marker | `#839496` |
-| Warm emphasis and notices | `#EEE8D5` |
-| Selection highlights | `#FDF6E3` |
-| Borders | `#586E75` |
-| Document indicator | `#859900` |
-| Warning indicators | `#B58900` |
-| Error indicators | `#DC322F` |
+| Swatch | Use | Color |
+| --- | --- | --- |
+| <img src="docs/assets/swatches/000000.svg" width="64" height="24" alt="Black swatch"> | Canvas surround and recessed surfaces | `#000000` |
+| <img src="docs/assets/swatches/001e26.svg" width="64" height="24" alt="Deep blue-green swatch"> | Header, toolbars and panels | `#001E26` |
+| <img src="docs/assets/swatches/2aa198.svg" width="64" height="24" alt="Cyan swatch"> | Buttons, accents and focus rings | `#2AA198` |
+| <img src="docs/assets/swatches/93a1a1.svg" width="64" height="24" alt="Light gray swatch"> | Main text and primary-button hover | `#93A1A1` |
+| <img src="docs/assets/swatches/839496.svg" width="64" height="24" alt="Muted gray swatch"> | Secondary text and baseline marker | `#839496` |
+| <img src="docs/assets/swatches/eee8d5.svg" width="64" height="24" alt="Warm ivory swatch"> | Warm emphasis and notices | `#EEE8D5` |
+| <img src="docs/assets/swatches/fdf6e3.svg" width="64" height="24" alt="Pale cream swatch"> | Selection highlights | `#FDF6E3` |
+| <img src="docs/assets/swatches/586e75.svg" width="64" height="24" alt="Slate gray swatch"> | Borders | `#586E75` |
+| <img src="docs/assets/swatches/859900.svg" width="64" height="24" alt="Green swatch"> | Document indicator | `#859900` |
+| <img src="docs/assets/swatches/b58900.svg" width="64" height="24" alt="Yellow swatch"> | Warning indicators | `#B58900` |
+| <img src="docs/assets/swatches/dc322f.svg" width="64" height="24" alt="Red swatch"> | Error indicators | `#DC322F` |
 
-**Neutral preview colors:** the transparency checkerboard uses `#D0D1C9` / `#B2B5AE`; navigator `#292E33` / `#30363B`; comparison previews `#30373A` / `#394143`; frame thumbnails `#343B40`; layer thumbnails `#191D22`.
+**Neutral preview colors**
 
-**Transparent overlays:** separators `#586E7566`, hover fills `#586E7533`, shadows `#00000066` / `#000000CC`, modal backdrop `#000000B8`, pixel grid `#002B3630`, symmetry guide `#2AA19888`, and brush cursor `#FDF6E3AA`. These use `#RRGGBBAA`: the last two digits specify alpha.
+| Swatch | Use | Color |
+| --- | --- | --- |
+| <img src="docs/assets/swatches/d0d1c9.svg" width="64" height="24" alt="Light checkerboard swatch"> | Transparency checkerboard, light squares | `#D0D1C9` |
+| <img src="docs/assets/swatches/b2b5ae.svg" width="64" height="24" alt="Dark checkerboard swatch"> | Transparency checkerboard, dark squares | `#B2B5AE` |
+| <img src="docs/assets/swatches/292e33.svg" width="64" height="24" alt="Dark navigator swatch"> | Navigator, first shade | `#292E33` |
+| <img src="docs/assets/swatches/30363b.svg" width="64" height="24" alt="Lighter navigator swatch"> | Navigator, second shade | `#30363B` |
+| <img src="docs/assets/swatches/30373a.svg" width="64" height="24" alt="Dark comparison swatch"> | Comparison previews, first shade | `#30373A` |
+| <img src="docs/assets/swatches/394143.svg" width="64" height="24" alt="Lighter comparison swatch"> | Comparison previews, second shade | `#394143` |
+| <img src="docs/assets/swatches/343b40.svg" width="64" height="24" alt="Frame thumbnail swatch"> | Frame thumbnails | `#343B40` |
+| <img src="docs/assets/swatches/191d22.svg" width="64" height="24" alt="Layer thumbnail swatch"> | Layer thumbnails | `#191D22` |
+
+**Transparent overlays**
+
+These use `#RRGGBBAA`: the last two digits specify alpha. Swatches show each overlay over the neutral checkerboard; its appearance changes with the background underneath.
+
+| Swatch | Use | Color |
+| --- | --- | --- |
+| <img src="docs/assets/swatches/586e7566.svg" width="64" height="24" alt="Separator overlay on a checkerboard"> | Separators | `#586E7566` |
+| <img src="docs/assets/swatches/586e7533.svg" width="64" height="24" alt="Hover overlay on a checkerboard"> | Hover fills | `#586E7533` |
+| <img src="docs/assets/swatches/00000066.svg" width="64" height="24" alt="Soft shadow on a checkerboard"> | Shadows | `#00000066` |
+| <img src="docs/assets/swatches/000000cc.svg" width="64" height="24" alt="Strong shadow on a checkerboard"> | Strong shadows | `#000000CC` |
+| <img src="docs/assets/swatches/000000b8.svg" width="64" height="24" alt="Modal backdrop on a checkerboard"> | Modal backdrop | `#000000B8` |
+| <img src="docs/assets/swatches/002b3630.svg" width="64" height="24" alt="Pixel grid overlay on a checkerboard"> | Pixel grid | `#002B3630` |
+| <img src="docs/assets/swatches/2aa19888.svg" width="64" height="24" alt="Symmetry guide on a checkerboard"> | Symmetry guide | `#2AA19888` |
+| <img src="docs/assets/swatches/fdf6e3aa.svg" width="64" height="24" alt="Brush cursor overlay on a checkerboard"> | Brush cursor | `#FDF6E3AA` |
 
 The theme never recolors artwork, exports, editing swatches or the mascot. [CSS tokens](web/styles.css#L1-L15) define the interface palette; the [handbook](docs/book/01-using-studio/README.md#deepseafoam-interface) explains the rendering boundary and credits the original Solarized palette.
 

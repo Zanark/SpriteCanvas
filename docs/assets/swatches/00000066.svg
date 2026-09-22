@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="24" viewBox="0 0 64 24">
+  <title>Shadow #00000066 over the neutral checkerboard</title>
+  <defs><pattern id="checker" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#d0d1c9"/><path d="M6 0h6v6H6zM0 6h6v6H0z" fill="#b2b5ae"/></pattern></defs>
+  <rect x=".5" y=".5" width="63" height="23" rx="3" fill="url(#checker)"/>
+  <rect x=".5" y=".5" width="63" height="23" rx="3" fill="#00000066" stroke="#839496"/>
+</svg>
